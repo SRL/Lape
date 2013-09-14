@@ -25,6 +25,10 @@ type
 procedure _LapeWrite(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 procedure _LapeWriteLn(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 
+{$IFDEF Lape_NativeKeyword}
+procedure _LapeUNatify(const Params: PParamArray; const Result: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
+{$ENDIF}
+
 procedure _LapeAssigned(const Params: PParamArray; const Result: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 procedure _LapeRaise(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 procedure _LapeRaiseString(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
@@ -389,13 +393,23 @@ var
     '  _ArraySetLength(Dst, LenDst + LenSrc - Count, ElSize, nil, nil);'                 + LineEnding +
     'end;';
 
+  {$IFDEF Lape_NativeKeyword}
+  _LapeNatify: lpString =
+    'function Natify(Method: Pointer): Pointer;'                                         + LineEnding +
+    'begin'                                                                              + LineEnding +
+    '  Result := _Natify($%X, Method);'                                                  + LineEnding +
+    'end;';
+  {$ENDIF}
+
 implementation
 
 uses
   Variants, Math,
   {$IFDEF Lape_NeedAnsiStringsUnit}AnsiStrings,{$ENDIF}
   {$IFDEF FPC}LCLIntf,{$ELSE}{$IFDEF MSWINDOWS}Windows,{$ENDIF}{$ENDIF}
-  lpexceptions, lpparser;
+  lpexceptions, lpparser, lpcompiler
+
+  {$IFDEF Lape_NativeKeyword}, lpvartypes, ffi, lpffi{$ENDIF};
 
 {$RangeChecks Off}
 {$OverflowChecks Off}
@@ -412,6 +426,45 @@ procedure _LapeWriteLn(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$EN
 begin
   WriteLn('');
 end;
+
+{$IFDEF Lape_NativeKeyword}
+procedure _LapeUNatify(const Params: PParamArray; const Result: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
+  function getByCodePos(Compiler: TLapeCompiler; CodePos: TCodePos): TLapeGlobalVar;
+  var
+    DeclArr: TLapeDeclArray;
+    I, H: UInt32;
+  begin
+    DeclArr := Compiler.GlobalDeclarations.getByClass(TLapeGlobalVar, bTrue);
+
+    H := High(DeclArr);
+    for I := 0 to H do
+      if ((DeclArr[I] <> nil) and ((DeclArr[I]as TLapeGlobalVar).Ptr <> nil)) then
+        if (TCodePos((DeclArr[I] as TLapeGlobalVar).Ptr^) = CodePos) then
+          Exit(DeclArr[I] as TLapeGlobalVar);
+  end;
+type
+  PLapeCompiler = ^TLapeCompiler;
+var
+  Method: TLapeGlobalVar;
+  Wrapper: TExportClosure;
+begin
+  Method := getByCodePos(PLapeCompiler(Params^[0])^, PCodePos(Params^[1])^);
+
+  if (not Assigned(Method)) then
+    LapeException(lpeImpossible); //TODO: Proper error?
+
+  if (Method.BaseType <> ltScriptMethod) then
+    LapeException('Only script methods may be used with Natify');
+
+  Wrapper := LapeExportWrapper(Method);
+
+  if (not Assigned(Wrapper)) then
+    LapeException(lpeImpossible); //TODO: Proper error?
+
+  PPointer(Result)^ := Wrapper.func;
+  PLapeCompiler(Params^[0])^.WrapperList.Add(Wrapper);
+end;
+{$ENDIF}
 
 procedure _LapeAssigned(const Params: PParamArray; const Result: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 begin
