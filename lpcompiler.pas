@@ -82,6 +82,8 @@ type
     FDefines: TStringList;
     FConditionalStack: TLapeConditionalStack;
 
+    {$IFDEF Lape_NativeKeyword}FWrapperList: TList;{$ENDIF}
+
     FOnHandleDirective: TLapeHandleDirective;
     FOnFindFile: TLapeFindFile;
     FAfterParsing: TLapeCompilerNotification;
@@ -235,6 +237,7 @@ type
     property Tree: TLapeTree_Base read FTree;
     property DelayedTree: TLapeTree_DelayedStatementList read FDelayedTree;
     property Importing: Boolean read getImporting write setImporting;
+    property WrapperList: TList read FWrapperList;
   published
     property Tokenizer: TLapeTokenizerBase read getTokenizer write setTokenizer;
     property Defines: TStringList read FDefines write setBaseDefines;
@@ -262,7 +265,9 @@ implementation
 uses
   Variants,
   lpvartypes_ord, lpvartypes_record, lpvartypes_array,
-  lpexceptions, lpeval, lpinterpreter;
+  lpexceptions, lpeval, lpinterpreter
+
+  {$IFDEF Lape_NativeKeyword}, ffi, lpffi{$ENDIF};
 
 function TLapeCompiler.getPDocPos: PDocPos;
 begin
@@ -649,6 +654,11 @@ begin
 
   addGlobalFunc('procedure _Write(s: string);', @_LapeWrite);
   addGlobalFunc('procedure _WriteLn();', @_LapeWriteLn);
+
+  {$IFDEF Lape_NativeKeyword}
+  addGlobalFunc('function _Natify(Compiler: PtrUInt; Method: Pointer): Pointer;', @_LapeUNatify);
+  addDelayedCode(Format(_LapeNatify, [PtrUInt(Self)]));
+  {$ENDIF}
 
   addGlobalFunc('procedure _Assert(Expr: EvalBool); overload;', @_LapeAssert);
   addGlobalFunc('procedure _Assert(Expr: EvalBool; Msg: string); overload;', @_LapeAssertMsg);
@@ -1386,7 +1396,7 @@ begin
     SetStackOwner(TLapeDeclStack.Create(TLapeType_MethodOfType(FuncHeader).ObjectType));
 
   try
-    isNext([tk_kw_Forward, tk_kw_Overload, tk_kw_Override]);
+    isNext([{$IFDEF Lape_NativeKeyword}tk_kw_Native,{$ENDIF} tk_kw_Forward, tk_kw_Overload, tk_kw_Override]);
     OldDeclaration := getDeclarationNoWith(FuncName, FStackInfo.Owner);
     LocalDecl := (OldDeclaration <> nil) and hasDeclaration(OldDeclaration, FStackInfo.Owner, True, False);
 
@@ -1542,6 +1552,20 @@ begin
         FreeAndNil(Result);
         Exit;
       end;
+
+      {$IFDEF Lape_NativeKeyword}
+      if (Tokenizer.Tok = tk_kw_Native) then
+      begin
+        ParseExpressionEnd(tk_sym_SemiColon, True, False);
+
+        if (not (FFILoaded)) then
+          LapeException(lpeNativeFFIMissing, Tokenizer.DocPos);
+
+        Result.Method.Name := '_' + Result.Method.Name;
+        addGlobalVar(nil, FuncName);
+        addDelayedCode(Format('begin %s := Natify(@%s); end;', [FuncName, Result.Method.Name]), False);
+      end;
+      {$ENDIF}
 
       Result.Method.isConstant := True;
       if isExternal then
@@ -2852,6 +2876,10 @@ begin
   FDefines.CaseSensitive := LapeCaseSensitive;
   FConditionalStack := TLapeConditionalStack.Create(0);
 
+  {$IFDEF Lape_NativeKeyword}
+  FWrapperList := TList.Create();
+  {$ENDIF}
+
   FOnHandleDirective := nil;
   FOnFindFile := nil;
   FAfterParsing := TLapeCompilerNotification.Create();
@@ -2918,6 +2946,14 @@ begin
   FreeAndNil(FAfterParsing);
   FreeAndNil(FTreeMethodMap);
   FreeAndNil(FInternalMethodMap);
+  {$IFDEF Lape_NativeKeyword}
+  while (FWrapperList.Count > 0) do
+  begin
+    TExportClosure(FWrapperList.Items[0]).Free();
+    FWrapperList.Delete(0);
+  end;
+  FreeAndNil(FWrapperList);
+  {$ENDIF}
   inherited;
 end;
 
