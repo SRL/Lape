@@ -43,6 +43,7 @@ type
     tk_kw_Function,
     tk_kw_If,
     {$IFDEF Lape_PascalLabels}tk_kw_Label,{$ENDIF}
+    {$IFDEF Lape_NativeKeyword}tk_kw_Native,{$ENDIF}
     tk_kw_Of,
     tk_kw_Object,
     tk_kw_Out,
@@ -64,6 +65,7 @@ type
     tk_kw_Var,
     tk_kw_While,
     tk_kw_With,
+
 
     //Operators
     //Same order as lptypes.EOperator
@@ -236,7 +238,7 @@ const
   ParserToken_Symbols = [tk_sym_BracketClose..tk_sym_SemiColon];
   ParserToken_Types = [tk_typ_Float..tk_typ_Char];
 
-  Lape_Keywords: array[0..44 {$IFDEF Lape_PascalLabels}+1{$ENDIF}] of TLapeKeyword = (
+  Lape_Keywords: array[0..44 {$IFDEF Lape_PascalLabels}+1{$ENDIF} {$IFDEF Lape_NativeKeyword}+1{$ENDIF}] of TLapeKeyword = (
       (Keyword: 'AND';          Token: tk_op_AND),
       (Keyword: 'DIV';          Token: tk_op_DIV),
       (Keyword: 'IN';           Token: tk_op_IN),
@@ -264,6 +266,9 @@ const
       (Keyword: 'IF';           Token: tk_kw_If),
       {$IFDEF Lape_PascalLabels}
       (Keyword: 'LABEL';        Token: tk_kw_Label),
+      {$ENDIF}
+      {$IFDEF Lape_NativeKeyword}
+      (Keyword: 'NATIVE';       Token: tk_kw_Native),
       {$ENDIF}
       (Keyword: 'OBJECT';       Token: tk_kw_Object),
       (Keyword: 'OF';           Token: tk_kw_Of),

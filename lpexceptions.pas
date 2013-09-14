@@ -81,6 +81,7 @@ resourcestring
   lpeVariableExpected = 'Variable expected';
   lpeVariableOfTypeExpected = 'Expected variable of type "%s", got "%s"';
   lpeWrongNumberParams = 'Wrong number of parameters found, expected %d';
+  {$IFDEF Lape_NativeKeyword}lpeNativeFFIMissing = 'The native keyword requires libffi';{$ENDIF}
 
 procedure LapeException(Msg: lpString); overload;
 procedure LapeException(Msg: lpString; DocPos: TDocPos); overload;
