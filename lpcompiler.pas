@@ -237,6 +237,7 @@ type
     property Importing: Boolean read getImporting write setImporting;
   published
     property Tokenizer: TLapeTokenizerBase read getTokenizer write setTokenizer;
+    property BaseDefines: TStringList read FBaseDefines;
     property Defines: TStringList read FDefines write setBaseDefines;
     property OnHandleDirective: TLapeHandleDirective read FOnHandleDirective write FOnHandleDirective;
     property OnFindFile: TLapeFindFile read FOnFindFile write FOnFindFile;
