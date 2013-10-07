@@ -56,6 +56,15 @@ begin
   {$IFEND}
 end;
 
+procedure _LapeGetTickCount64(const Params: PParamArray; const Result: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
+begin
+  {$IF DECLARED(GetTickCount64)}
+  PUInt64(Result)^ := GetTickCount64();
+  {$ELSE}
+  _LapeGetTickCount(Params, Result);
+  {$IFEND}
+end;
+
 procedure _LapeSleep(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 begin
   Sleep(PUInt32(Params^[0])^);
