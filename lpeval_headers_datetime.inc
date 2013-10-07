@@ -18,6 +18,7 @@ procedure _LapeTime(const Params: PParamArray; const Result: Pointer); {$IFDEF L
 procedure _LapeNow(const Params: PParamArray; const Result: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 
 procedure _LapeGetTickCount(const Params: PParamArray; const Result: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
+procedure _LapeGetTickCount64(const Params: PParamArray; const Result: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 procedure _LapeSleep(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 
 procedure _LapeReplaceTime(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
