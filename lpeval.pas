@@ -392,9 +392,9 @@ var
 
   {$IFDEF Lape_NativeKeyword}
   _LapeNatify: lpString =
-    'function Natify(Method: Pointer): Pointer;'                                         + LineEnding +
+    'function Natify(Method: Pointer; CallConv: UInt32 := 0): Pointer;'                  + LineEnding +
     'begin'                                                                              + LineEnding +
-    '  Result := _Natify($%X, Method);'                                                  + LineEnding +
+    '  Result := _Natify($%X, Method, CallConv);'                                        + LineEnding +
     'end;';
   {$ENDIF}
 
@@ -452,8 +452,24 @@ begin
   if (Method.BaseType <> ltScriptMethod) then
     LapeException('Only script methods may be used with Natify');
 
-  Wrapper := LapeExportWrapper(Method);
+  case PUInt32(Params^[2])^ of
+    1: Wrapper := LapeExportWrapper(Method, FFI_SYSV);
 
+	{$IFDEF WINDOWS}{$IFDEF WIN32}
+	2: Wrapper := LapeExportWrapper(Method, FFI_STDCALL);
+	3: Wrapper := LapeExportWrapper(Method, FFI_THISCALL);
+	4: Wrapper := LapeExportWrapper(Method, FFI_FASTCALL);
+	5: Wrapper := LapeExportWrapper(Method, FFI_MS_CDECL);
+	{$ELSE}
+	2: Wrapper := LapeExportWrapper(Method, FFI_WIN64);
+	{$ENDIF}
+	{$ELSE}
+	2: Wrapper := LapeExportWrapper(Method, FFI_UNIX64);
+	{$ENDIF}
+    else
+	  Wrapper := LapeExportWrapper(Method);
+  end;
+  
   if (not Assigned(Wrapper)) then
     LapeException(lpeImpossible); //TODO: Proper error?
 
