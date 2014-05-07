@@ -127,10 +127,10 @@ type
     function ParseIdentifierList(FirstNext: Boolean = False): TStringArray; virtual;
 
     function ParseBlockList(StopAfterBeginEnd: Boolean = True): TLapeTree_StatementList; virtual;
-    function ParseMethodHeader(out Name: lpString; addToScope: Boolean = True): TLapeType_Method; virtual;
+    function ParseMethodHeader(out Name: lpString; addToScope: Boolean = True; AppendCompiler: Boolean = False): TLapeType_Method; virtual;
     function ParseMethod(FuncForwards: TLapeFuncForwards; FuncHeader: TLapeType_Method; FuncName: lpString; isExternal: Boolean): TLapeTree_Method; overload; virtual;
     function ParseMethod(FuncForwards: TLapeFuncForwards; FuncHeader: TLapeType_Method; FuncName: lpString): TLapeTree_Method; overload; virtual;
-    function ParseMethod(FuncForwards: TLapeFuncForwards; isExternal: Boolean = False): TLapeTree_Method; overload; virtual;
+    function ParseMethod(FuncForwards: TLapeFuncForwards; isExternal: Boolean = False; AppendCompiler: Boolean = False): TLapeTree_Method; overload; virtual;
     function ParseType(TypeForwards: TLapeTypeForwards; addToStackOwner: Boolean = False; ScopedEnums: Boolean = False): TLapeType; virtual;
     procedure ParseTypeBlock; virtual;
     procedure ParseLabelBlock; virtual;
@@ -218,7 +218,7 @@ type
     function addGlobalType(Typ: TLapeType; AName: lpString = ''; ACopy: Boolean = True): TLapeType; overload; virtual;
     function addGlobalType(Str: lpString; AName: lpString): TLapeType; overload; virtual;
 
-    function addGlobalFunc(AHeader: lpString; Value: Pointer): TLapeGlobalVar; overload; virtual;
+    function addGlobalFunc(AHeader: lpString; Value: Pointer; AppendCompiler: Boolean = False): TLapeGlobalVar; overload; virtual;
     function addGlobalFunc(AHeader: TLapeType_Method; AName, Body: lpString): TLapeTree_Method; overload; virtual;
     function addGlobalFunc(AParams: array of TLapeType; AParTypes: array of ELapeParameterType; AParDefaults: array of TLapeGlobalVar; ARes: TLapeType; Value: Pointer; AName: lpString): TLapeGlobalVar; overload; virtual;
     function addGlobalFunc(AParams: array of TLapeType; AParTypes: array of ELapeParameterType; AParDefaults: array of TLapeGlobalVar; Value: Pointer; AName: lpString): TLapeGlobalVar; overload; virtual;
@@ -628,6 +628,7 @@ begin
   addBaseDefine('Sesquipedalian');
 
   addCompilerFuncs();
+  addGlobalVar(Pointer(Self), 'Compiler').isConstant := True;
   addGlobalVar(addManagedType(TLapeType_SystemUnit.Create(Self)).NewGlobalVarP(nil), 'System').isConstant := True;
 
   addGlobalType(TLapeType_Label.Create(Self), '!label');
@@ -1178,7 +1179,7 @@ begin
     FreeAndNil(Result);
 end;
 
-function TLapeCompiler.ParseMethodHeader(out Name: lpString; addToScope: Boolean = True): TLapeType_Method;
+function TLapeCompiler.ParseMethodHeader(out Name: lpString; addToScope: Boolean = True; AppendCompiler: Boolean = False): TLapeType_Method;
 
   procedure addVar(ParType: ELapeParameterType; VarType: TLapeType; AVar: lpString);
   begin
@@ -1275,6 +1276,16 @@ begin
           Result.addParam(Param);
         end;
       until (Tokenizer.Tok = tk_sym_ParenthesisClose);
+
+    if (AppendCompiler) then
+    begin
+      addVar(lptConst, BaseTypes[ltPointer], 'Compiler');
+
+      Param.ParType := lptConst;
+      Param.VarType := BaseTypes[ltPointer];
+      Param.Default := getGlobalVar('Compiler');
+      Result.addParam(Param);
+    end;
 
     if isFunction then
     begin
@@ -1576,7 +1587,7 @@ begin
   end;
 end;
 
-function TLapeCompiler.ParseMethod(FuncForwards: TLapeFuncForwards; isExternal: Boolean = False): TLapeTree_Method;
+function TLapeCompiler.ParseMethod(FuncForwards: TLapeFuncForwards; isExternal: Boolean = False; AppendCompiler: Boolean = False): TLapeTree_Method;
 var
   FuncHeader: TLapeType_Method;
   FuncName: lpString;
@@ -1585,7 +1596,7 @@ begin
   IncStackInfo();
 
   try
-    FuncHeader := ParseMethodHeader(FuncName, not isExternal);
+    FuncHeader := ParseMethodHeader(FuncName, not isExternal, AppendCompiler);
     ParseExpressionEnd(tk_sym_SemiColon, True, False);
     Result := ParseMethod(FuncForwards, FuncHeader, FuncName, isExternal);
   finally
@@ -3465,7 +3476,7 @@ begin
   end;
 end;
 
-function TLapeCompiler.addGlobalFunc(AHeader: lpString; Value: Pointer): TLapeGlobalVar;
+function TLapeCompiler.addGlobalFunc(AHeader: lpString; Value: Pointer; AppendCompiler: Boolean = False): TLapeGlobalVar;
 var
   Method: TLapeTree_Method;
   OldState: Pointer;
@@ -3475,7 +3486,7 @@ begin
 
   try
     Expect([tk_kw_Function, tk_kw_Procedure]);
-    Method := ParseMethod(nil, True);
+    Method := ParseMethod(nil, True, AppendCompiler);
     CheckAfterCompile();
 
     try
@@ -3650,4 +3661,4 @@ begin
 end;
 
 end.
-
+
