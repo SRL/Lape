@@ -655,7 +655,7 @@ begin
   addGlobalFunc('procedure _WriteLn();', @_LapeWriteLn);
 
   {$IFDEF Lape_NativeKeyword}
-  addGlobalFunc('function _Natify(Compiler: PtrUInt; Method: Pointer; CallConv: UInt32 := 0): Pointer;', @_LapeUNatify);
+  addGlobalFunc('function _Natify(Compiler: PtrUInt; Method: Pointer): Pointer;', @_LapeUNatify);
   addDelayedCode(Format(_LapeNatify, [PtrUInt(Self)]));
   {$ENDIF}
 
