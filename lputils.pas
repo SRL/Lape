@@ -99,9 +99,8 @@ begin
         'function ExceptionToString(Ex: TIFException; Param: string): string; begin '         +
           'Result := ToString(Ex);'                                                           +
           'if (Param <> '#39#39') then Result := Result + '#39'('#39' + Param + '#39')'#39';' +
-        'end;'                                                                                + LineEnding +
-        'procedure RaiseException(Ex: TIFException; Param: string); overload; begin RaiseException(ExceptionToString(Ex, Param)); end;'
-      );
+        'end;');
+      addGlobalFunc('procedure RaiseException(Ex: TIFException; Param: string); overload;', @_LapeRaiseStringEx);
     end;
   end;
 end;
