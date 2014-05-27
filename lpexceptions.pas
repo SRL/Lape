@@ -52,7 +52,7 @@ resourcestring
   lpeExpectedOther = 'Found unexpected token "%s", expected "%s"';
   lpeExpressionExpected = 'Expression expected';
   lpeFileNotFound = 'File "%s" not found';
-  lpeImpossible = 'It''s impossible!';
+  lpeImpossible = 'It''s impossible!';  //Should be "Unexpected error at line: ..."?
   lpeIncompatibleAssignment = 'Can''t assign "%s" to "%s"';
   lpeIncompatibleOperator = 'Operator "%s" not compatible with types';
   lpeIncompatibleOperator1 = 'Operator "%s" not compatible with "%s"';
@@ -92,6 +92,7 @@ resourcestring
   lpeWrongNumberParams = 'Wrong number of parameters found, expected %d';
   {$IFDEF Lape_NativeKeyword}lpeNativeFFIMissing = 'The native keyword requires libffi';{$ENDIF}
 
+  function LapeIFExceptionToString(Expt: LapeTIFException): String;
 procedure LapeException(Msg: lpString); overload;
 procedure LapeException(Msg: lpString; DocPos: TDocPos); overload;
 procedure LapeException(Msg: lpString; DocPos: array of TLapeBaseDeclClass); overload;
@@ -100,6 +101,20 @@ procedure LapeExceptionFmt(Msg: lpString; Args: array of const; DocPos: TDocPos)
 procedure LapeExceptionFmt(Msg: lpString; Args: array of const; DocPos: array of TLapeBaseDeclClass); overload;
 
 implementation
+
+//Converts and formats a lape exception.
+function LapeIFExceptionToString(Expt: LapeTIFException): String;
+var ExptStr:String; C:Char;
+begin
+  WriteStr(ExptStr, Expt);
+  ExptStr := Copy(ExptStr,6,Length(ExptStr));
+  Result := '';
+  for C in ExptStr do
+    if (UpperCase(C) = C) and (Result<>'') then
+      Result := Result + ' ' + C
+    else
+      Result := Result + C;
+end;
 
 constructor lpException.Create(Msg: string; OldMsg: string = '');
 begin
@@ -213,4 +228,4 @@ begin
 end;
 
 end.
-
+
