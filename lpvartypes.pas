@@ -1786,7 +1786,7 @@ begin
     if (not Result.HasType()) or (not ValidEvalFunction(EvalProc)) then
       if (op = op_Dot) and ValidFieldName(Right) then
         Exit(EvalDot(PlpString(Right.VarPos.GlobalVar.Ptr)^))
-      else if (op = op_Assign) and Right.HasType() then
+      else if ((op = op_Assign) or (op = op_PlusAsgn) or (op = op_MinusAsgn) or (op = op_MulAsgn) or (op = op_PowAsgn) or (op = op_DivAsgn)) and Right.HasType() then
         LapeExceptionFmt(lpeIncompatibleAssignment, [Right.VarType.AsString, AsString])
       else if (not (op in UnaryOperators)) and ((not Left.HasType()) or (not Right.HasType()) or (not Left.VarType.Equals(Right.VarType, False))) then
         if (Left.HasType() and Right.HasType() and Left.VarType.Equals(Right.VarType, False)) or

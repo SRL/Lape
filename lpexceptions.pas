@@ -52,7 +52,7 @@ resourcestring
   lpeExpectedOther = 'Found unexpected token "%s", expected "%s"';
   lpeExpressionExpected = 'Expression expected';
   lpeFileNotFound = 'File "%s" not found';
-  lpeImpossible = 'It''s impossible!';
+  lpeImpossible = 'It''s impossible!';  //Should be "Unexpected error at line: ..."?
   lpeIncompatibleAssignment = 'Can''t assign "%s" to "%s"';
   lpeIncompatibleOperator = 'Operator "%s" not compatible with types';
   lpeIncompatibleOperator1 = 'Operator "%s" not compatible with "%s"';

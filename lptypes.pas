@@ -174,6 +174,13 @@ type
     op_Addr,
     op_AND,
     op_Assign,
+    
+    op_DivAsgn, //assignment by ...
+    op_MinusAsgn,
+    op_MulAsgn,     
+    op_PlusAsgn,      
+    op_PowAsgn,     
+    
     op_Deref,
     op_DIV,
     op_Divide,
@@ -566,14 +573,18 @@ const
   CompareOperators = [op_cmp_Equal, op_cmp_GreaterThan, op_cmp_GreaterThanOrEqual, op_cmp_LessThan, op_cmp_LessThanOrEqual, op_cmp_NotEqual];
 
   LabelOperators = CompareOperators;
-  EnumOperators = [op_Plus, op_Minus, op_Assign] + CompareOperators;
+  EnumOperators = [op_Plus, op_Minus, op_Assign, op_PlusAsgn, op_MinusAsgn, op_MulAsgn, op_PowAsgn, op_DivAsgn] + CompareOperators;
 
   op_str: array[EOperator] of lpString = ('',
-    '=', '>', '>=', '<', '<=', '<>', '@', 'and', ':=', '^', 'div', '/', '.' , 'in',
-    '[', '-', 'mod', '*', 'not', 'or', '+', '**', 'shl', 'shr', 'xor', '-', '+');
+    '=', '>', '>=', '<', '<=', '<>', '@', 'and', ':=', '/=', '-=', '*=', '+=', '**=', 
+    '^', 'div', '/', '.' , 'in', '[', '-', 'mod', '*', 'not', 'or', '+', '**',
+    'shl', 'shr', 'xor', '-', '+');
+  
   op_name: array[EOperator] of lpString = ('',
-    'EQ', 'GT', 'GTEQ', 'LT', 'LTEQ', 'NEQ', {'ADDR'}'', 'AND', 'ASGN', {'DREF'}'', 'IDIV', 'DIV', {'dot'}'', 'IN',
-    {'index'}'', 'SUB', 'MOD', 'MUL', 'NOT', 'OR', 'ADD', {'power'}'', 'SHL', 'SHR', 'XOR', 'UMIN', {'UPOS'}'');
+    'EQ', 'GT', 'GTEQ', 'LT', 'LTEQ', 'NEQ', {'ADDR'}'', 'AND', 'ASGN', 
+    'DIVASGN', 'POWASGN', 'MULASGN', 'ADDASGN', 'SUBASGN',  {'DREF'}'', 
+    'IDIV', 'DIV', {'dot'}'', 'IN', {'index'}'', 'SUB', 'MOD', 'MUL', 'NOT',
+    'OR', 'ADD', 'POW', 'SHL', 'SHR', 'XOR', 'UMIN', {'UPOS'}'');
 
 var
   lowUInt8: UInt8 = Low(UInt8);    highUInt8: UInt8 = High(UInt8);
