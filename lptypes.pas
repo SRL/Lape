@@ -158,6 +158,16 @@ type
     ltScriptMethod, ltImportedMethod                                          //Methods
   );
   LapeIntegerTypeRange = ltUInt8..ltInt64;
+  
+  LapeTIFException = (
+        lp_erNoError, lp_erCannotImport, lp_erInvalidType, lp_erInternalError,
+        lp_erInvalidHeader, lp_erInvalidOpcode, lp_erInvalidOpcodeParameter,
+        lp_erNoMainProc, lp_erOutOfGlobalVarsRange, lp_erOutOfProcRange, lp_erOutOfRange,
+        lp_erOutOfStackRange, lp_erTypeMismatch, lp_erUnexpectedEof, lp_erVersionError,
+        lp_erDivideByZero, lp_erMathError, lp_erCouldNotCallProc, lp_erOutofRecordRange,
+        lp_erOutOfMemory, lp_erException, lp_erNullPointerException, lp_erNullVariantError,
+        lp_erInterfaceNotSupported, lp_erCustomError);
+  LapePIFException = ^LapeTIFException;
 
   EOperatorAssociative = (assocNone, assocLeft, assocRight);
   EOperator = (
