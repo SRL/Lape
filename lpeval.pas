@@ -28,6 +28,7 @@ procedure _LapeWriteLn(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$EN
 procedure _LapeAssigned(const Params: PParamArray; const Result: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 procedure _LapeRaise(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 procedure _LapeRaiseString(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
+procedure _LapeRaiseStringEx(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 procedure _LapeAssert(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 procedure _LapeAssertMsg(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 procedure _LapeRangeCheck(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
@@ -428,6 +429,16 @@ end;
 procedure _LapeRaiseString(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 begin
   LapeException(PlpString(Params^[0])^);
+end;
+
+procedure _LapeRaiseStringEx(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
+var Expt,Err:String;
+begin
+  Expt := LapeIFExceptionToString(LapePIFException(Params^[0])^);
+  Err := PlpString(Params^[1])^;
+  if (Err <> '') then
+    Expt := Expt + ' (' + #39 + Err + #39 + ')';
+  LapeException(Expt);
 end;
 
 procedure _LapeAssert(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
