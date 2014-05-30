@@ -2135,6 +2135,7 @@ var
         if (FDest.VarPos.MemPos = NullResVar.VarPos.MemPos) then
           FDest := VarResVar;
         FCompiler.getDestVar(FDest, Result, op_Unknown);
+        FCompiler.VarToDefault(Result, Offset, @Self._DocPos);
         FCompiler.Emitter._InvokeImportedFunc(IdentVar, Result, i * SizeOf(Pointer), Offset, @Self._DocPos)
       end;
     end;

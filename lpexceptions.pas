@@ -92,7 +92,7 @@ resourcestring
   lpeWrongNumberParams = 'Wrong number of parameters found, expected %d';
   {$IFDEF Lape_NativeKeyword}lpeNativeFFIMissing = 'The native keyword requires libffi';{$ENDIF}
 
-  function LapeIFExceptionToString(Expt: LapeTIFException): String;
+function LapeIFExceptionToString(Expt: LapeTIFException): String;
 procedure LapeException(Msg: lpString); overload;
 procedure LapeException(Msg: lpString; DocPos: TDocPos); overload;
 procedure LapeException(Msg: lpString; DocPos: array of TLapeBaseDeclClass); overload;
