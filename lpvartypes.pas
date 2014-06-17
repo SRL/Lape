@@ -1786,10 +1786,8 @@ begin
     if (not Result.HasType()) or (not ValidEvalFunction(EvalProc)) then
       if (op = op_Dot) and ValidFieldName(Right) then
         Exit(EvalDot(PlpString(Right.VarPos.GlobalVar.Ptr)^))
-        
-      else if (op in [op_Assign, op_PlusAsgn, op_MinusAsgn, op_MulAsgn, op_PowAsgn, op_DivAsgn]) and Right.HasType() then
+      else if ((op = op_Assign) or (op = op_PlusAsgn) or (op = op_MinusAsgn) or (op = op_MulAsgn) or (op = op_PowAsgn) or (op = op_DivAsgn)) and Right.HasType() then
         LapeExceptionFmt(lpeIncompatibleAssignment, [Right.VarType.AsString, AsString])
-        
       else if (not (op in UnaryOperators)) and ((not Left.HasType()) or (not Right.HasType()) or (not Left.VarType.Equals(Right.VarType, False))) then
         if (Left.HasType() and Right.HasType() and Left.VarType.Equals(Right.VarType, False)) or
           (((not Left.HasType()) or (not Right.HasType()) or  (Left.VarType.Size >= Right.VarType.Size)) and (not TryCast(True, Result))  and (not TryCast(False, Result))) or
@@ -1801,7 +1799,6 @@ begin
             LapeExceptionFmt(lpeIncompatibleOperator2, [LapeOperatorToString(op), AsString, LapeTypeToString(ltUnknown)])
         else
           Exit
-          
       else if (op in UnaryOperators) then
         LapeExceptionFmt(lpeIncompatibleOperator1, [LapeOperatorToString(op), AsString])
       else
@@ -1816,26 +1813,17 @@ begin
 
       FCompiler.Emitter._Eval(EvalProc, Left, Right, NullResVar, Offset, Pos);
       Result := Left;
-      
-    end else if (op in [op_PlusAsgn, op_MinusAsgn, op_MulAsgn, op_PowAsgn, op_DivAsgn]) then
-    begin
-      if not(Left.HasType()) or not(Right.HasType()) then
-        LapeException(lpeInvalidAssignment);
-        
-      FCompiler.Emitter._Eval(EvalProc, Left, Left, Right, Offset, Pos);
-      Result := Left;
-      
-    end else
+    end
+    else
     begin
       if (op = op_Addr) and (not Left.Writeable) then
         LapeException(lpeVariableExpected);
       FCompiler.Emitter._Eval(EvalProc, Result, Left, Right, Offset, Pos);
     end;
 
-    
     if (op = op_Deref) then
       Result.VarPos.isPointer := (Result.VarPos.MemPos = mpVar);
-    if not(op = op_Assign) then
+    if (op <> op_Assign) then
     begin
       Result.Readable := (op <> op_Deref) and Result.Readable;
       Result.Writeable := (op = op_Deref) or Result.Writeable;
