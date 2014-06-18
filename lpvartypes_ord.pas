@@ -635,7 +635,7 @@ begin
    
   if (Right <> nil) and Right.IsOrdinal() and
      (((BaseType in LapeBoolTypes) and (op in BinaryOperators + EnumOperators + CompoundOperators) and
-     (Right.BaseType in LapeBoolTypes)) or ((op in EnumOperators) and ((not (Right.BaseType in LapeEnumTypes)) or Equals(Right))))
+     (Right.BaseType in LapeBoolTypes)) or ((op in EnumOperators + CompoundOperators) and ((not (Right.BaseType in LapeEnumTypes)) or Equals(Right))))
   then
   begin
     Result := FCompiler.getBaseType(BaseIntType).EvalRes(Op, FCompiler.getBaseType(Right.BaseIntType), Flags);
