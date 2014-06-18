@@ -3813,7 +3813,7 @@ procedure lpeVariant_POWASGN_Currency(const Dest, Left, Right: Pointer); {$IFDEF
 procedure lpeVariant_POWASGN_Extended(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PVariant(Left)^ := PVariant(Left)^ ** PExtended(Right)^; end;
 procedure lpeVariant_POWASGN_Variant(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PVariant(Left)^ := PVariant(Left)^ ** PVariant(Right)^; end;
                        
-
+//assignment by division
 procedure lpeUInt8_DIVASGN_UInt8(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PUInt32(Left)^ := UInt32(PUInt8(Left)^) div UInt32(PUInt8(Right)^); end;
 procedure lpeUInt8_DIVASGN_Int8(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PInt32(Left)^ := Int32(PUInt8(Left)^) div Int32(PInt8(Right)^); end;
 procedure lpeUInt8_DIVASGN_UInt16(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PUInt32(Left)^ := UInt32(PUInt8(Left)^) div UInt32(PUInt16(Right)^); end;

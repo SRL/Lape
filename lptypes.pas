@@ -583,7 +583,8 @@ const
   CompareOperators = [op_cmp_Equal, op_cmp_GreaterThan, op_cmp_GreaterThanOrEqual, op_cmp_LessThan, op_cmp_LessThanOrEqual, op_cmp_NotEqual];
 
   LabelOperators = CompareOperators;
-  EnumOperators = [op_Plus, op_Minus, op_Assign, op_PlusAsgn, op_MinusAsgn, op_MulAsgn, op_PowAsgn, op_DivAsgn] + CompareOperators;
+  EnumOperators = [op_Plus, op_Minus, op_Assign] + CompareOperators;
+  CompoundOperators = [op_PlusAsgn, op_MinusAsgn, op_DivAsgn, op_MulAsgn, op_PowAsgn];
 
   op_str: array[EOperator] of lpString = ('',
     '=', '>', '>=', '<', '<=', '<>', '@', 'and', ':=', '/=', '-=', '*=', '+=', '**=', 
