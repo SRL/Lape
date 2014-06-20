@@ -629,9 +629,13 @@ function TLapeType_Enum.EvalRes(Op: EOperator; Right: TLapeType = nil; Flags: EL
 begin
   Assert(FCompiler <> nil);
 
+  //Temp solution: Should be checked at an more appropriate place, where we can get the current line position as well.
+  if (Right <> nil) and ((BaseType in LapeBoolTypes) and (op in [op_Multiply, op_MOD, op_Power, op_DIV, op_Divide, op_shr, op_shl, op_in])) then
+    LapeExceptionFmt(lpeIncompatibleOperator2, [LapeOperatorToString(op), AsString, Right.AsString ]);
+   
   if (Right <> nil) and Right.IsOrdinal() and
-     (((BaseType in LapeBoolTypes) and (op in BinaryOperators + EnumOperators) and (Right.BaseType in LapeBoolTypes)) or
-     ((op in EnumOperators) and ((not (Right.BaseType in LapeEnumTypes)) or Equals(Right))))
+     (((BaseType in LapeBoolTypes) and (op in BinaryOperators + EnumOperators + CompoundOperators) and
+     (Right.BaseType in LapeBoolTypes)) or ((op in EnumOperators + CompoundOperators) and ((not (Right.BaseType in LapeEnumTypes)) or Equals(Right))))
   then
   begin
     Result := FCompiler.getBaseType(BaseIntType).EvalRes(Op, FCompiler.getBaseType(Right.BaseIntType), Flags);
@@ -695,6 +699,7 @@ begin
      ((op in EnumOperators) and ((not (Right.VarType.BaseType in LapeEnumTypes)) or Equals(Right.VarType))))
   then
   try
+    
     tmpVar := NullResVar;
     tmpDest := NullResVar;
     tmpType := Right.VarType;
