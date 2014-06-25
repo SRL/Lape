@@ -2957,14 +2957,6 @@ Arr[op_Plus][ltAnsiChar][ltVariant] := @lpeAChar_ADD_Variant;
 Arr[op_Plus][ltAnsiChar][ltAnsiChar] := @lpeAChar_ADD_AChar;
 Arr[op_Plus][ltAnsiChar][ltWideChar] := @lpeAChar_ADD_WChar;
 
-Arr[op_PlusAsgn][ltAnsiChar][ltShortString] := @lpeAChar_ADDASGN_SString;
-Arr[op_PlusAsgn][ltAnsiChar][ltAnsiString] := @lpeAChar_ADDASGN_AString;
-Arr[op_PlusAsgn][ltAnsiChar][ltWideString] := @lpeAChar_ADDASGN_WString;
-Arr[op_PlusAsgn][ltAnsiChar][ltUnicodeString] := @lpeAChar_ADDASGN_UString;
-Arr[op_PlusAsgn][ltAnsiChar][ltVariant] := @lpeAChar_ADDASGN_Variant;
-Arr[op_PlusAsgn][ltAnsiChar][ltAnsiChar] := @lpeAChar_ADDASGN_AChar;
-Arr[op_PlusAsgn][ltAnsiChar][ltWideChar] := @lpeAChar_ADDASGN_WChar;
-
 //WideChar
 Arr[op_cmp_Equal][ltWideChar][ltAnsiChar] := Arr[op_cmp_Equal][ltUInt16][ltUInt8];
 Arr[op_cmp_Equal][ltWideChar][ltWideChar] := Arr[op_cmp_Equal][ltUInt16][ltUInt16];
@@ -3022,14 +3014,6 @@ Arr[op_Plus][ltWideChar][ltUnicodeString] := @lpeWChar_ADD_UString;
 Arr[op_Plus][ltWideChar][ltVariant] := @lpeWChar_ADD_Variant;
 Arr[op_Plus][ltWideChar][ltWideChar] := @lpeWChar_ADD_WChar;
 Arr[op_Plus][ltWideChar][ltAnsiChar] := @lpeWChar_ADD_AChar;
-
-Arr[op_PlusAsgn][ltWideChar][ltShortString] := @lpeWChar_ADDASGN_SString;
-Arr[op_PlusAsgn][ltWideChar][ltAnsiString] := @lpeWChar_ADDASGN_AString;
-Arr[op_PlusAsgn][ltWideChar][ltWideString] := @lpeWChar_ADDASGN_WString;
-Arr[op_PlusAsgn][ltWideChar][ltUnicodeString] := @lpeWChar_ADDASGN_UString;
-Arr[op_PlusAsgn][ltWideChar][ltVariant] := @lpeWChar_ADDASGN_Variant;
-Arr[op_PlusAsgn][ltWideChar][ltWideChar] := @lpeWChar_ADDASGN_WChar;
-Arr[op_PlusAsgn][ltWideChar][ltAnsiChar] := @lpeWChar_ADDASGN_AChar;
 
 //Pointer
 Arr[op_cmp_Equal][ltPointer][ltPointer] := @lpePointer_EQ_Pointer;

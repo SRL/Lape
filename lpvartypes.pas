@@ -1817,7 +1817,7 @@ begin
       FCompiler.Emitter._Eval(EvalProc, Left, Right, NullResVar, Offset, Pos);
       Result := Left;
       
-    end else if (op in [op_PlusAsgn, op_MinusAsgn, op_MulAsgn, op_PowAsgn, op_DivAsgn]) then
+    end else if (op in [op_PlusAsgn, op_MinusAsgn, op_MulAsgn, op_PowAsgn, op_DivAsgn]) then 
     begin
       if not(Left.HasType()) or not(Right.HasType()) then
         LapeException(lpeInvalidAssignment);
