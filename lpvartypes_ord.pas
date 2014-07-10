@@ -663,8 +663,16 @@ begin
     if (not IsOrdinal()) or (not Right.HasType()) or (not Right.VarType.IsOrdinal()) then
       LapeException(lpeInvalidEvaluation);
 
-    Left.VarType := FCompiler.getBaseType(BaseIntType);
-    Right.VarType := FCompiler.getBaseType(Right.VarType.BaseIntType);
+
+    if not( (Right.VarType.BaseType in LapeBoolTypes) and (Left.VarType.BaseType in LapeBoolTypes) and 
+            (op in [op_cmp_equal, op_cmp_notequal]) ) then
+    begin
+      Left.VarType := FCompiler.getBaseType(BaseIntType);
+      Right.VarType := FCompiler.getBaseType(Right.VarType.BaseIntType);
+    end else begin
+      Result := inherited;
+      Exit();
+    end;
 
     Result := Left.VarType.EvalConst(Op, Left, Right, Flags);
     if Result.HasType() and (not (op in CompareOperators)) then
