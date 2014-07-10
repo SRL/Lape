@@ -7,6 +7,34 @@
 }
 {%MainUnit lpeval.pas}
 
+//Boolean handling
+Arr[op_cmp_Equal][ltBoolean][ltBoolean]   := @lpeByteBool_EQ_ByteBool;
+Arr[op_cmp_Equal][ltBoolean][ltByteBool]  := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+Arr[op_cmp_Equal][ltBoolean][ltWordBool]  := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+Arr[op_cmp_Equal][ltLongBool][ltBoolean]  := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+Arr[op_cmp_Equal][ltLongBool][ltByteBool] := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+Arr[op_cmp_Equal][ltLongBool][ltWordBool] := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+Arr[op_cmp_Equal][ltByteBool][ltBoolean]  := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+Arr[op_cmp_Equal][ltByteBool][ltByteBool] := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+Arr[op_cmp_Equal][ltByteBool][ltWordBool] := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+Arr[op_cmp_Equal][ltWordBool][ltBoolean]  := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+Arr[op_cmp_Equal][ltWordBool][ltByteBool] := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+Arr[op_cmp_Equal][ltWordBool][ltWordBool] := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+
+Arr[op_cmp_NotEqual][ltBoolean][ltBoolean]   := @lpeByteBool_NEQ_ByteBool;
+Arr[op_cmp_NotEqual][ltBoolean][ltByteBool]  := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+Arr[op_cmp_NotEqual][ltBoolean][ltWordBool]  := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+Arr[op_cmp_NotEqual][ltLongBool][ltBoolean]  := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+Arr[op_cmp_NotEqual][ltLongBool][ltByteBool] := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+Arr[op_cmp_NotEqual][ltLongBool][ltWordBool] := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+Arr[op_cmp_NotEqual][ltByteBool][ltBoolean]  := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+Arr[op_cmp_NotEqual][ltByteBool][ltByteBool] := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+Arr[op_cmp_NotEqual][ltByteBool][ltWordBool] := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+Arr[op_cmp_NotEqual][ltWordBool][ltBoolean]  := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+Arr[op_cmp_NotEqual][ltWordBool][ltByteBool] := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+Arr[op_cmp_NotEqual][ltWordBool][ltWordBool] := Arr[op_cmp_Equal][ltBoolean][ltBoolean];
+
+//..
 Arr[op_cmp_Equal][ltUInt8][ltUInt8] := @lpeUInt8_EQ_UInt8;
 Arr[op_cmp_Equal][ltUInt8][ltInt8] := @lpeUInt8_EQ_Int8;
 Arr[op_cmp_Equal][ltUInt8][ltUInt16] := @lpeUInt8_EQ_UInt16;

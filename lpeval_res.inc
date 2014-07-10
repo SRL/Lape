@@ -6,6 +6,31 @@
   This include constains all the result types for most evaluation operations.
 }
 {%MainUnit lpeval.pas}
+Arr[op_cmp_Equal][ltBoolean][ltBoolean]   := ltEvalBool;
+Arr[op_cmp_Equal][ltBoolean][ltByteBool]  := ltEvalBool;
+Arr[op_cmp_Equal][ltBoolean][ltWordBool]  := ltEvalBool;
+Arr[op_cmp_Equal][ltLongBool][ltBoolean]  := ltEvalBool;
+Arr[op_cmp_Equal][ltLongBool][ltByteBool] := ltEvalBool;
+Arr[op_cmp_Equal][ltLongBool][ltWordBool] := ltEvalBool;
+Arr[op_cmp_Equal][ltByteBool][ltBoolean]  := ltEvalBool;
+Arr[op_cmp_Equal][ltByteBool][ltByteBool] := ltEvalBool;
+Arr[op_cmp_Equal][ltByteBool][ltWordBool] := ltEvalBool;
+Arr[op_cmp_Equal][ltWordBool][ltBoolean]  := ltEvalBool;
+Arr[op_cmp_Equal][ltWordBool][ltByteBool] := ltEvalBool;
+Arr[op_cmp_Equal][ltWordBool][ltWordBool] := ltEvalBool;
+
+Arr[op_cmp_NotEqual][ltBoolean][ltBoolean]   := ltEvalBool;
+Arr[op_cmp_NotEqual][ltBoolean][ltByteBool]  := ltEvalBool;
+Arr[op_cmp_NotEqual][ltBoolean][ltWordBool]  := ltEvalBool;
+Arr[op_cmp_NotEqual][ltLongBool][ltBoolean]  := ltEvalBool;
+Arr[op_cmp_NotEqual][ltLongBool][ltByteBool] := ltEvalBool;
+Arr[op_cmp_NotEqual][ltLongBool][ltWordBool] := ltEvalBool;
+Arr[op_cmp_NotEqual][ltByteBool][ltBoolean]  := ltEvalBool;
+Arr[op_cmp_NotEqual][ltByteBool][ltByteBool] := ltEvalBool;
+Arr[op_cmp_NotEqual][ltByteBool][ltWordBool] := ltEvalBool;
+Arr[op_cmp_NotEqual][ltWordBool][ltBoolean]  := ltEvalBool;
+Arr[op_cmp_NotEqual][ltWordBool][ltByteBool] := ltEvalBool;
+Arr[op_cmp_NotEqual][ltWordBool][ltWordBool] := ltEvalBool;
 
 Arr[op_cmp_Equal][ltUInt8][ltUInt8] := ltEvalBool;
 Arr[op_cmp_Equal][ltUInt8][ltInt8] := ltEvalBool;
