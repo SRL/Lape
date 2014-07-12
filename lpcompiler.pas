@@ -136,7 +136,7 @@ type
     function ParseType(TypeForwards: TLapeTypeForwards; addToStackOwner: Boolean = False; ScopedEnums: Boolean = False): TLapeType; virtual;
     procedure ParseTypeBlock; virtual;
     procedure ParseLabelBlock; virtual;
-    function ParseVarBlock(OneOnly: Boolean = False; ValidEnd: EParserTokenSet = [tk_sym_SemiColon]): TLapeTree_VarList; virtual;
+    function ParseVarBlock(OneOnly: Boolean = False; ValidEnd: EParserTokenSet = [tk_sym_SemiColon]; OnlyOne_NextAfter:Boolean=True): TLapeTree_VarList; virtual;
 
     function ParseExpression(ReturnOn: EParserTokenSet = []; FirstNext: Boolean = True; DoFold: Boolean = True): TLapeTree_ExprBase; virtual;
     function ParseTypeExpression(ReturnOn: EParserTokenSet = []; FirstNext: Boolean = True; DoFold: Boolean = True): TLapeTree_Base; virtual;
@@ -1972,7 +1972,7 @@ begin
       addLocalDecl(VarType.NewGlobalVarP(nil, Identifiers[i]));
 end;
 
-function TLapeCompiler.ParseVarBlock(OneOnly: Boolean = False; ValidEnd: EParserTokenSet = [tk_sym_SemiColon]): TLapeTree_VarList;
+function TLapeCompiler.ParseVarBlock(OneOnly: Boolean = False; ValidEnd: EParserTokenSet = [tk_sym_SemiColon]; OnlyOne_NextAfter:Boolean=True): TLapeTree_VarList;
 var
   i: Integer;
   isConst, wasShortCircuit: Boolean;
@@ -2072,8 +2072,9 @@ begin
         if (DefVal is TLapeVar) then
           TLapeVar(DefVal).setReadWrite(isConst and (DefConstVal <> nil), not isConst);
       end;
-    until (Next() <> tk_Identifier) or OneOnly;
-
+    until OneOnly or (Next() <> tk_Identifier);
+    if OneOnly and OnlyOne_NextAfter then Next();
+    
     if wasShortCircuit then
       FOptions := FOptions + [lcoShortCircuit];
   except
@@ -2682,9 +2683,8 @@ begin
   Result := TLapeTree_For.Create(Self, getPDocPos());
 
   try
-
     if (lcoLooseSyntax in FOptions) and isNext([tk_kw_Var]) then
-      with ParseVarBlock(True, [tk_kw_To]) do
+      with ParseVarBlock(True, [tk_kw_To,tk_kw_DownTo], False) do
       try
         if (Vars.Count <> 1) then
           LapeException(lpeVariableExpected, DocPos);
@@ -2704,9 +2704,11 @@ begin
         Free();
       end
     else
+    begin
       Result.Counter := ParseExpression();
-
-    Expect([tk_kw_To, tk_kw_DownTo], False, False);
+      Expect([tk_kw_To, tk_kw_DownTo], False, False);
+    end;
+    
     if (Tokenizer.Tok = tk_kw_DownTo) then
       Result.WalkDown := True;
     Result.Limit := ParseExpression();
