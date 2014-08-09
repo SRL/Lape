@@ -14,6 +14,7 @@ addGlobalFunc('function Abs(d: Extended): Extended; overload;', @_LapeAbs);
 addGlobalFunc('function Abs(d: Int64): Int64; overload;', @_LapeAbsI);
 addGlobalFunc('function Power(Base, Exponent: Extended): Extended;', @_LapePower);
 addGlobalFunc('function Sqr(d: Extended): Extended;', @_LapeSqr);
+addGlobalFunc('function Sqr(d: Int64): Int64;', @_LapeSqrI);
 addGlobalFunc('function Sqrt(d: Extended): Extended;', @_LapeSqrt);
 addGlobalFunc('function ArcTan(d: Extended): Extended;', @_LapeArcTan);
 addGlobalFunc('function Ln(d: Extended): Extended;', @_LapeLn);
