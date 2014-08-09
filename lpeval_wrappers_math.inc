@@ -27,6 +27,11 @@ begin
   PExtended(Result)^ := Sqr(PExtended(Params^[0])^);
 end;
 
+procedure _LapeSqrI(const Params: PParamArray; const Result: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
+begin
+  PInt64(Result)^ := Sqr(PInt64(Params^[0])^);
+end;
+
 procedure _LapeSqrt(const Params: PParamArray; const Result: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 begin
   PExtended(Result)^ := Sqrt(PExtended(Params^[0])^);
