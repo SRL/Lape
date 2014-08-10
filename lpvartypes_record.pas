@@ -225,6 +225,11 @@ function TLapeType_Record.EvalRes(Op: EOperator; Right: TLapeType = nil; Flags: 
 var
   i: Integer;
 begin
+  if (op in [op_cmp_Equal,op_cmp_NotEqual]) and (Right <> nil) and (Right is TLapeType_Record) and
+     (TLapeType_Record(Right).FieldMap.Count = FFieldMap.Count) then
+  begin
+    Result := FCompiler.BaseTypes[ltEvalBool]
+  end else
   if (op = op_Assign) and (Right <> nil) and (Right is TLapeType_Record) and
      (TLapeType_Record(Right).FieldMap.Count = FFieldMap.Count) then
   begin
@@ -295,14 +300,17 @@ end;
 
 function TLapeType_Record.Eval(Op: EOperator; var Dest: TResVar; Left, Right: TResVar; Flags: ELapeEvalFlags; var Offset: Integer; Pos: PDocPos = nil): TResVar;
 var
-  i, FieldOffset: Integer;
-  tmpVar, LeftVar, RightVar, LeftFieldName, RightFieldName: TResVar;
+  i, fieldsize, FieldOffset: Integer;
+  tmpVar, junkVar, LeftFieldName, RightFieldName: TResVar;
+  LeftVar, RightVar: TResVar;
   tmpType: TLapeType;
+  tmpData: TLapeStackTempVar;
 begin
   Assert(FCompiler <> nil);
   Assert(Left.VarType = Self);
   tmpVar := NullResVar;
-
+  junkVar := NullResVar;
+  
   if (Op = op_Dot) and ValidFieldName(Right) and FFieldMap.ExistsKey(PlpString(Right.VarPos.GlobalVar.Ptr)^) then
     with FFieldMap[PlpString(Right.VarPos.GlobalVar.Ptr)^] do
     begin
@@ -370,7 +378,32 @@ begin
       end;
       Result := Left;
     end
-  else
+  // compare records for equality (left = right).
+  else if (op in [op_cmp_equal,op_cmp_notequal]) and Right.HasType() and CompatibleWith(Right.VarType) then
+  begin
+    FieldSize := FFieldMap.Count - 1;
+    for i:=0 to FieldSize do
+    begin
+      LeftFieldName := _ResVar.New(FCompiler.getConstant(FFieldMap.Key[i]));
+      RightFieldName := _ResVar.New(FCompiler.getConstant(TLapeType_Record(Right.VarType).FieldMap.Key[i]));
+
+      LeftVar := Eval(op_Dot, tmpVar, Left, LeftFieldName, [], Offset, Pos);
+      RightVar := Right.VarType.Eval(op_Dot, tmpVar, Right, RightFieldName, [], Offset, Pos);
+
+      if (i=FieldSize) and (i=0) then
+        TmpVar := LeftVar.VarType.Eval(op, Dest, LeftVar, RightVar, [], Offset, Pos)
+      else
+        TmpVar := LeftVar.VarType.Eval(op, JunkVar, LeftVar, RightVar, [], Offset, Pos);
+
+      if (i > 0) then
+        if (i = FieldSize) then
+          Result := Result.VarType.Eval(op_and, Dest, Result, TmpVar, [], Offset, Pos)
+        else
+          Result := Result.VarType.Eval(op_and, JunkVar, Result, TmpVar, [], Offset, Pos)
+      else
+        Result := TmpVar;
+    end;
+  end else
     Result := inherited;
 end;
 

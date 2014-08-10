@@ -7,6 +7,9 @@
 }
 {%MainUnit lpeval.pas}
 
+procedure lpeByteBool_EQ_ByteBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PUInt8(Left)^ > 0) = (PUInt8(Right)^ > 0); end;
+procedure lpeByteBool_NEQ_ByteBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PUInt8(Left)^ > 0) <> (PUInt8(Right)^ > 0); end;
+//...
 procedure lpeUInt8_EQ_UInt8(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := PUInt8(Left)^ = PUInt8(Right)^; end;
 procedure lpeUInt8_EQ_Int8(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := PUInt8(Left)^ = PInt8(Right)^; end;
 procedure lpeUInt8_EQ_UInt16(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := PUInt8(Left)^ = PUInt16(Right)^; end;
