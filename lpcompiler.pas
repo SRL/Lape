@@ -528,7 +528,7 @@ begin
     Exit;
 
   if (AType = nil) then
-    AType := addManagedType(TLapeType_Method.Create(Self, [AParams[0], AParams[1]], [lptVar, lptOut], [TLapeGlobalVar(nil), TLapeGlobalVar(nil)], AResult)) as TLapeType_Method;
+    AType := addManagedType(TLapeType_Method.Create(Self, [AParams[0], AParams[1]], [lptOut, lptConstRef], [TLapeGlobalVar(nil), TLapeGlobalVar(nil)], AResult)) as TLapeType_Method;
 
   IncStackInfo();
   try
@@ -536,8 +536,8 @@ begin
     Sender.addMethod(Result);
 
     Assignment := TLapeTree_Operator.Create(op_Assign, Self);
-    Assignment.Right := TLapeTree_ResVar.Create(_ResVar.New(FStackInfo.addVar(lptOut, AParams[1])), Self);
-    Assignment.Left := TLapeTree_ResVar.Create(_ResVar.New(FStackInfo.addVar(lptVar, AParams[0])), Self);
+    Assignment.Right := TLapeTree_ResVar.Create(_ResVar.New(FStackInfo.addVar(lptConstRef, AParams[1])), Self);
+    Assignment.Left := TLapeTree_ResVar.Create(_ResVar.New(FStackInfo.addVar(lptOut, AParams[0])), Self);
 
     Method := TLapeTree_Method.Create(Result, FStackInfo, Self);
     Method.Statements := TLapeTree_StatementList.Create(Self);
@@ -3160,7 +3160,7 @@ begin
   try
     with ParseStatementList() do
     try
-      Compile(Offset);
+      Compile(Offset).Spill(1);
     finally
       Free();
     end;
@@ -3187,7 +3187,10 @@ begin
       FTree.Compile().Spill(1);
 
     FDelayedTree.Compile(True, ldfStatements).Spill(1);
+
+    FStackInfo.FullDisposal := lcoFullDisposal in FOptions;
     DecStackInfo(False, True, True);
+
     FDelayedTree.Compile(True, ldfMethods).Spill(1);
 
     FEmitter._op(ocNone);
@@ -3234,7 +3237,7 @@ begin
 
       FunctionOnly := True;
       addParam(TLapeTree_ResVar.Create(AVar.IncLock(), Self, Pos));
-      Compile(Offset);
+      Compile(Offset).Spill(1);
     finally
       if wasConstant then
         AVar.Writeable := False;
