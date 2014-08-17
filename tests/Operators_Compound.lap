@@ -1,0 +1,1250 @@
+{$assertions On}
+(* 
+  Test compound operators (+=, -=, /=, *=, **=) 
+*)
+
+
+procedure ResetVars(var si8:Int8; var ui8:uInt8; var si16:Int16; var ui16:uInt16; var si32:Int32; var ui32:uInt32; var si64:Int64; var ui64:uInt64)
+begin
+  si8 := 3; ui8 := 3; si16 := 3; ui16 := 3; si32 := 3; ui32 := 3; si64 := 3; ui64 := 3;
+end;
+
+procedure ResetVarsF(var f32:Single; var f64:Double; var f80:Extended);
+begin
+  f32 := 3.5; f64 := 3.5; f80 := 3.5;
+end;
+
+
+var
+  f32:Single = 3.5;
+  f64:Double = 3.5;
+  f80:Extended = 3.5;
+
+var
+  si8:Int8 = 3;
+  ui8:uInt8 = 3;
+  si16:Int16 = 3;
+  ui16:uInt16 = 3;
+  si32:Int32 = 3;
+  ui32:uInt32 = 3;
+  si64:Int64 = 3;
+  ui64:uInt64 = 3;
+
+
+procedure test_add_asgn();
+begin
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 += ui8) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 += si16) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 += ui16) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 += si32) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 += ui32) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 += si64) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 += ui64) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 += si8) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 += si16) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 += ui16) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 += si32) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 += ui32) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 += si64) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 += ui64) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 += si8) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 += ui8) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 += ui16) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 += si32) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 += ui32) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 += si64) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 += ui64) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 += si8) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 += ui8) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 += si16) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 += si32) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 += ui32) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 += si64) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 += ui64) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 += si8) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 += ui8) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 += si16) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 += ui16) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 += ui32) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 += si64) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 += ui64) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 += si8) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 += ui8) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 += si16) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 += ui16) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 += si32) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 += si64) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 += ui64) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 += si8) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 += ui8) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 += si16) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 += ui16) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 += si32) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 += ui32) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 += ui64) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 += si8) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 += ui8) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 += si16) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 += ui16) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 += si32) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 += ui32) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 += si64) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 += si8) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 += ui8) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 += si16) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 += ui16) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 += si32) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 += ui32) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 += si64) = 6);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 += ui64) = 6);
+
+end;
+
+procedure test_sub_asgn();
+begin
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 -= ui8) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 -= si16) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 -= ui16) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 -= si32) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 -= ui32) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 -= si64) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 -= ui64) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 -= si8) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 -= si16) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 -= ui16) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 -= si32) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 -= ui32) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 -= si64) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 -= ui64) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 -= si8) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 -= ui8) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 -= ui16) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 -= si32) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 -= ui32) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 -= si64) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 -= ui64) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 -= si8) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 -= ui8) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 -= si16) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 -= si32) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 -= ui32) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 -= si64) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 -= ui64) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 -= si8) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 -= ui8) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 -= si16) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 -= ui16) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 -= ui32) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 -= si64) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 -= ui64) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 -= si8) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 -= ui8) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 -= si16) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 -= ui16) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 -= si32) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 -= si64) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 -= ui64) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 -= si8) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 -= ui8) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 -= si16) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 -= ui16) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 -= si32) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 -= ui32) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 -= ui64) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 -= si8) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 -= ui8) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 -= si16) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 -= ui16) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 -= si32) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 -= ui32) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 -= si64) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 -= si8) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 -= ui8) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 -= si16) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 -= ui16) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 -= si32) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 -= ui32) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 -= si64) = 0);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 -= ui64) = 0);
+
+end;
+
+procedure test_mul_asgn();
+begin
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 *= ui8) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 *= si16) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 *= ui16) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 *= si32) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 *= ui32) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 *= si64) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 *= ui64) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 *= si8) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 *= si16) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 *= ui16) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 *= si32) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 *= ui32) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 *= si64) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 *= ui64) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 *= si8) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 *= ui8) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 *= ui16) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 *= si32) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 *= ui32) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 *= si64) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 *= ui64) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 *= si8) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 *= ui8) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 *= si16) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 *= si32) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 *= ui32) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 *= si64) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 *= ui64) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 *= si8) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 *= ui8) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 *= si16) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 *= ui16) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 *= ui32) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 *= si64) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 *= ui64) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 *= si8) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 *= ui8) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 *= si16) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 *= ui16) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 *= si32) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 *= si64) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 *= ui64) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 *= si8) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 *= ui8) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 *= si16) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 *= ui16) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 *= si32) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 *= ui32) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 *= ui64) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 *= si8) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 *= ui8) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 *= si16) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 *= ui16) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 *= si32) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 *= ui32) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 *= si64) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 *= si8) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 *= ui8) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 *= si16) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 *= ui16) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 *= si32) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 *= ui32) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 *= si64) = 9);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 *= ui64) = 9);
+
+end;
+
+procedure test_div_asgn();
+begin
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 /= ui8) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 /= si16) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 /= ui16) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 /= si32) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 /= ui32) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 /= si64) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 /= ui64) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 /= si8) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 /= si16) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 /= ui16) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 /= si32) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 /= ui32) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 /= si64) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 /= ui64) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 /= si8) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 /= ui8) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 /= ui16) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 /= si32) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 /= ui32) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 /= si64) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 /= ui64) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 /= si8) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 /= ui8) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 /= si16) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 /= si32) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 /= ui32) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 /= si64) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 /= ui64) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 /= si8) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 /= ui8) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 /= si16) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 /= ui16) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 /= ui32) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 /= si64) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 /= ui64) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 /= si8) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 /= ui8) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 /= si16) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 /= ui16) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 /= si32) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 /= si64) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 /= ui64) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 /= si8) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 /= ui8) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 /= si16) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 /= ui16) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 /= si32) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 /= ui32) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 /= ui64) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 /= si8) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 /= ui8) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 /= si16) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 /= ui16) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 /= si32) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 /= ui32) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 /= si64) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 /= si8) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 /= ui8) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 /= si16) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 /= ui16) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 /= si32) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 /= ui32) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 /= si64) = 1);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 /= ui64) = 1);
+
+end;
+
+procedure test_pow_asgn();
+begin
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 **= ui8) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 **= si16) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 **= ui16) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 **= si32) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 **= ui32) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 **= si64) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 **= ui64) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 **= si8) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 **= si16) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 **= ui16) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 **= si32) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 **= ui32) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 **= si64) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 **= ui64) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 **= si8) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 **= ui8) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 **= ui16) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 **= si32) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 **= ui32) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 **= si64) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 **= ui64) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 **= si8) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 **= ui8) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 **= si16) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 **= si32) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 **= ui32) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 **= si64) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 **= ui64) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 **= si8) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 **= ui8) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 **= si16) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 **= ui16) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 **= ui32) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 **= si64) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 **= ui64) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 **= si8) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 **= ui8) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 **= si16) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 **= ui16) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 **= si32) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 **= si64) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 **= ui64) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 **= si8) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 **= ui8) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 **= si16) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 **= ui16) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 **= si32) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 **= ui32) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 **= ui64) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 **= si8) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 **= ui8) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 **= si16) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 **= ui16) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 **= si32) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 **= ui32) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 **= si64) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si8 **= si8) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui8 **= ui8) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si16 **= si16) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui16 **= ui16) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si32 **= si32) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui32 **= ui32) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((si64 **= si64) = 27);
+
+  ResetVars(si8,ui8,si16,ui16,si32,ui32,si64,ui64);
+  Assert((ui64 **= ui64) = 27);
+
+end;
+
+
+procedure LoopExpr();
+var i,j:Int32;
+begin
+  for i:=0 to 100000 do
+    j += (2 - 1) * 2;
+  Assert(j = 200002);
+end;
+
+
+
+//--| Floats |----------------------------------------------------------------\\
+
+procedure test_add_asgn_f();
+begin
+  ResetVarsF(f32,f64,f80);
+  Assert((f32 += f64) = 7.0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f32 += f80) = 7.0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f64 += f32) = 7.0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f64 += f80) = 7.0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f80 += f32) = 7.0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f80 += f64) = 7.0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f32 += f32) = 7.0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f64 += f64) = 7.0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f80 += f80) = 7.0);
+
+end;
+
+procedure test_sub_asgn_f();
+begin
+  ResetVarsF(f32,f64,f80);
+  Assert((f32 -= f64) = 0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f32 -= f80) = 0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f64 -= f32) = 0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f64 -= f80) = 0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f80 -= f32) = 0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f80 -= f64) = 0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f32 -= f32) = 0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f64 -= f64) = 0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f80 -= f80) = 0);
+
+end;
+
+procedure test_mul_asgn_f();
+begin
+  ResetVarsF(f32,f64,f80);
+  Assert((f32 *= f64) = 12.25);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f32 *= f80) = 12.25);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f64 *= f32) = 12.25);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f64 *= f80) = 12.25);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f80 *= f32) = 12.25);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f80 *= f64) = 12.25);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f32 *= f32) = 12.25);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f64 *= f64) = 12.25);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f80 *= f80) = 12.25);
+
+end;
+
+procedure test_div_asgn_f();
+begin
+  ResetVarsF(f32,f64,f80);
+  Assert((f32 /= f64) = 1.0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f32 /= f80) = 1.0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f64 /= f32) = 1.0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f64 /= f80) = 1.0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f80 /= f32) = 1.0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f80 /= f64) = 1.0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f32 /= f32) = 1.0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f64 /= f64) = 1.0);
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f80 /= f80) = 1.0);
+
+end;
+
+procedure test_pow_asgn_f();
+begin
+  ResetVarsF(f32,f64,f80);
+  Assert((f32 **= f64) = Single(Power(3.5,3.5)));
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f32 **= f80) = Single(Power(3.5,3.5)));
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f64 **= f32) = Double(Power(3.5,3.5)));
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f64 **= f80) = Double(Power(3.5,3.5)));
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f80 **= f32) = Power(3.5,3.5));
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f80 **= f64) = Power(3.5,3.5));
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f32 **= f32) = Single(Power(3.5,3.5)));
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f64 **= f64) = Double(Power(3.5,3.5)));
+
+  ResetVarsF(f32,f64,f80);
+  Assert((f80 **= f80) = Power(3.5,3.5));
+
+end;
+
+
+
+
+//--| Strings |---------------------------------------------------------------\\
+procedure test_add_asgn_string();
+var
+  s1:ShortString; s2:AnsiString; s3:WideString; s4:UnicodeString;
+  _s1:ShortString; _s2:AnsiString; _s3:WideString; _s4:UnicodeString;
+begin
+  _s1:='world'; _s2:='world'; _s3:='world'; _s4:='world';
+
+  s1 := 'hello ';
+  Assert((s1 += _s1) = 'hello world');
+  s1 := 'hello ';
+  Assert((s1 += _s2) = 'hello world');
+  s1 := 'hello ';
+  Assert((s1 += _s3) = 'hello world');
+  s1 := 'hello ';
+  Assert((s1 += _s4) = 'hello world');
+
+  s2 := 'hello ';
+  Assert((s2 += _s1) = 'hello world');
+  s2 := 'hello ';
+  Assert((s2 += _s2) = 'hello world');
+  s2 := 'hello ';
+  Assert((s2 += _s3) = 'hello world');
+  s2 := 'hello ';
+  Assert((s2 += _s4) = 'hello world');
+
+  s3 := 'hello ';
+  Assert((s3 += _s1) = 'hello world');
+  s3 := 'hello ';
+  Assert((s3 += _s2) = 'hello world');
+  s3 := 'hello ';
+  Assert((s3 += _s3) = 'hello world');
+  s3 := 'hello ';
+  Assert((s3 += _s4) = 'hello world');
+
+  s4 := 'hello ';
+  Assert((s4 += _s1) = 'hello world');
+  s4 := 'hello ';
+  Assert((s4 += _s2) = 'hello world');
+  s4 := 'hello ';
+  Assert((s4 += _s3) = 'hello world');
+  s4 := 'hello ';
+  Assert((s4 += _s4) = 'hello world');
+end;
+
+
+
+begin
+  test_add_asgn(); WriteLn('AddAsgn_Int :: Passed');
+  test_sub_asgn(); WriteLn('SubAsgn_Int :: Passed');
+  test_mul_asgn(); WriteLn('MulAsgn_Int :: Passed');
+  test_div_asgn(); WriteLn('DivAsgn_Int :: Passed');
+  test_pow_asgn(); WriteLn('PowAsgn_Int :: Passed');
+
+  test_add_asgn_f(); WriteLn('AddAsgn_Foalt :: Passed');
+  test_sub_asgn_f(); WriteLn('SubAsgn_Foalt :: Passed');
+  test_mul_asgn_f(); WriteLn('MulAsgn_Foalt :: Passed');
+  test_div_asgn_f(); WriteLn('DivAsgn_Foalt :: Passed');
+  test_pow_asgn_f(); WriteLn('PowAsgn_Foalt :: Passed');
+
+  test_add_asgn_string(); WriteLn('PowAsgn_String :: Passed');
+
+  LoopExpr(); WriteLn('Loop + Compound exprs :: Passed');
+end;
+
+

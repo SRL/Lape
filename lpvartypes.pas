@@ -1795,8 +1795,8 @@ begin
     if (not Result.HasType()) or (not ValidEvalFunction(EvalProc)) then
       if (op = op_Dot) and ValidFieldName(Right) then
         Exit(EvalDot(PlpString(Right.VarPos.GlobalVar.Ptr)^))
-      else if (op = op_Assign) and Right.HasType() then
-        LapeExceptionFmt(lpeIncompatibleAssignment, [Right.VarType.AsString, AsString])
+      else if (op in [op_Assign] + CompoundOperators) and Right.HasType() then
+        LapeExceptionFmt(lpeIncompatibleAssignment, [Right.VarType.AsString, AsString]) 
       else if (not (op in UnaryOperators)) and ((not Left.HasType()) or (not Right.HasType()) or (not Left.VarType.Equals(Right.VarType, False))) then
         if (Left.HasType() and Right.HasType() and Left.VarType.Equals(Right.VarType, False)) or
           (((not Left.HasType()) or (not Right.HasType()) or  (Left.VarType.Size >= Right.VarType.Size)) and (not TryCast(True, Result))  and (not TryCast(False, Result))) or
@@ -1825,7 +1825,7 @@ begin
     end
     else
     begin
-      if (op = op_Addr) and (not Left.Writeable) then
+      if (op in [op_Addr]+CompoundOperators) and (not Left.Writeable) then
         LapeException(lpeVariableExpected);
       FCompiler.Emitter._Eval(EvalProc, Result, Left, Right, Offset, Pos);
     end;
