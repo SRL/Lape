@@ -597,7 +597,7 @@ const
   op_name: array[EOperator] of lpString = ('',
     'EQ', 'GT', 'GTEQ', 'LT', 'LTEQ', 'NEQ', {'ADDR'}'', 'AND', 'ASGN',  'DIVASGN', 'POWASGN', 'MULASGN', 
     'ADDASGN', 'SUBASGN', {'DREF'}'', 'IDIV', 'DIV', {'dot'}'', 'IN', {'index'}'', 'SUB', 'MOD', 'MUL', 
-    'NOT', 'OR', 'ADD', {'power'}'', 'SHL', 'SHR', 'XOR', 'UMIN', {'UPOS'}'');
+    'NOT', 'OR', 'ADD', 'POW', 'SHL', 'SHR', 'XOR', 'UMIN', {'UPOS'}'');
 
 var
   lowUInt8: UInt8 = Low(UInt8);    highUInt8: UInt8 = High(UInt8);
