@@ -1236,13 +1236,13 @@ begin
   test_div_asgn(); WriteLn('DivAsgn_Int :: Passed');
   test_pow_asgn(); WriteLn('PowAsgn_Int :: Passed');
 
-  test_add_asgn_f(); WriteLn('AddAsgn_Foalt :: Passed');
-  test_sub_asgn_f(); WriteLn('SubAsgn_Foalt :: Passed');
-  test_mul_asgn_f(); WriteLn('MulAsgn_Foalt :: Passed');
-  test_div_asgn_f(); WriteLn('DivAsgn_Foalt :: Passed');
-  test_pow_asgn_f(); WriteLn('PowAsgn_Foalt :: Passed');
+  test_add_asgn_f(); WriteLn('AddAsgn_Float :: Passed');
+  test_sub_asgn_f(); WriteLn('SubAsgn_Float :: Passed');
+  test_mul_asgn_f(); WriteLn('MulAsgn_Float :: Passed');
+  test_div_asgn_f(); WriteLn('DivAsgn_Float :: Passed');
+  test_pow_asgn_f(); WriteLn('PowAsgn_Float :: Passed');
 
-  test_add_asgn_string(); WriteLn('PowAsgn_String :: Passed');
+  test_add_asgn_string(); WriteLn('AddAsgn_String :: Passed');
 
   LoopExpr(); WriteLn('Loop + Compound exprs :: Passed');
 end;
