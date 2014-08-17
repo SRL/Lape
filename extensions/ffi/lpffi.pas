@@ -158,12 +158,12 @@ function LapeHeaderToFFICif(Header: TLapeType_Method; ABI: TFFIABI = FFI_LAPE_AB
 function LapeHeaderToFFICif(Compiler: TLapeCompiler; Header: lpString; ABI: TFFIABI = FFI_LAPE_ABI): TFFICifManager; overload;
 
 function LapeImportWrapper(Func: Pointer; NativeCif: TFFICifManager): TImportClosure; overload;
-function LapeImportWrapper(Func: Pointer; Header: TLapeType_Method; ABI: TFFIABI = FFI_DEFAULT_ABI): TImportClosure; overload;
-function LapeImportWrapper(Func: Pointer; Compiler: TLapeCompiler; Header: lpString; ABI: TFFIABI = FFI_DEFAULT_ABI): TImportClosure; overload;
+function LapeImportWrapper(Func: Pointer; Header: TLapeType_Method; ABI: TFFIABI = FFI_LAPE_ABI): TImportClosure; overload;
+function LapeImportWrapper(Func: Pointer; Compiler: TLapeCompiler; Header: lpString; ABI: TFFIABI = FFI_LAPE_ABI): TImportClosure; overload;
 
 function LapeExportWrapper(Code: PByte; Func: TCodePos; NativeCif: TFFICifManager; ParamSizes: array of Integer): TExportClosure; overload;
-function LapeExportWrapper(Code: PByte; Func: TCodePos; Header: TLapeType_Method; ABI: TFFIABI = FFI_DEFAULT_ABI): TExportClosure; overload;
-function LapeExportWrapper(Func: TLapeGlobalVar; ABI: TFFIABI = FFI_DEFAULT_ABI): TExportClosure; overload;
+function LapeExportWrapper(Code: PByte; Func: TCodePos; Header: TLapeType_Method; ABI: TFFIABI = FFI_LAPE_ABI): TExportClosure; overload;
+function LapeExportWrapper(Func: TLapeGlobalVar; ABI: TFFIABI = FFI_LAPE_ABI): TExportClosure; overload;
 
 implementation
 
@@ -714,12 +714,12 @@ begin
   end;
 end;
 
-function LapeImportWrapper(Func: Pointer; Header: TLapeType_Method; ABI: TFFIABI = FFI_DEFAULT_ABI): TImportClosure;
+function LapeImportWrapper(Func: Pointer; Header: TLapeType_Method; ABI: TFFIABI = FFI_LAPE_ABI): TImportClosure;
 begin
   Result := LapeImportWrapper(Func, LapeHeaderToFFICif(Header, ABI));
 end;
 
-function LapeImportWrapper(Func: Pointer; Compiler: TLapeCompiler; Header: lpString; ABI: TFFIABI = FFI_DEFAULT_ABI): TImportClosure;
+function LapeImportWrapper(Func: Pointer; Compiler: TLapeCompiler; Header: lpString; ABI: TFFIABI = FFI_LAPE_ABI): TImportClosure;
 begin
   Result := LapeImportWrapper(Func, LapeHeaderToFFICif(Compiler, Header, ABI));
 end;
@@ -784,7 +784,7 @@ begin
   end;
 end;
 
-function LapeExportWrapper(Code: PByte; Func: TCodePos; Header: TLapeType_Method; ABI: TFFIABI = FFI_DEFAULT_ABI): TExportClosure;
+function LapeExportWrapper(Code: PByte; Func: TCodePos; Header: TLapeType_Method; ABI: TFFIABI = FFI_LAPE_ABI): TExportClosure;
 var
   i, c: Integer;
   ParSizes: array of Integer;
@@ -819,7 +819,7 @@ begin
   Result := LapeExportWrapper(Code, Func, LapeHeaderToFFICif(Header, ABI), ParSizes);
 end;
 
-function LapeExportWrapper(Func: TLapeGlobalVar; ABI: TFFIABI = FFI_DEFAULT_ABI): TExportClosure;
+function LapeExportWrapper(Func: TLapeGlobalVar; ABI: TFFIABI = FFI_LAPE_ABI): TExportClosure;
 begin
   if (Func = nil) or (not Func.HasType()) or (Func.VarType.Size < SizeOf(Pointer)) or
      (Func.VarType.Compiler = nil) or (Func.VarType.Compiler.Emitter = nil) or
