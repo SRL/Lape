@@ -49,6 +49,10 @@ interface
   {$ENDIF}
 {$ENDIF}
 
+{$if defined(CPUI386) or defined(CPUX86_64)}
+  {$DEFINE HAVE_LONG_DOUBLE}
+{$endif}
+
 uses
   ctypes, dynlibs;
 
@@ -73,17 +77,25 @@ type
     FFI_FIRST_ABI = 0,
 
     {$IFDEF LINUX}
-      FFI_SYSV,
-      FFI_UNIX64,
-      FFI_THISCALL,
-      FFI_FASTCALL,
-      FFI_STDCALL,
-      FFI_LAST_ABI,
+      {$IFDEF CPUARM}
+	FFI_SYSV,
+	FFI_VFP,
+	FFI_LAST_ABI,
 
-      {$IFDEF CPU32}
-        FFI_DEFAULT_ABI := FFI_FASTCALL
+	FFI_DEFAULT_ABI := FFI_SYSV
       {$ELSE}
-        FFI_DEFAULT_ABI := FFI_UNIX64
+        FFI_SYSV,
+        FFI_UNIX64,
+        FFI_THISCALL,
+        FFI_FASTCALL,
+        FFI_STDCALL,
+        FFI_LAST_ABI,
+
+        {$IFDEF CPU32}
+          FFI_DEFAULT_ABI := FFI_FASTCALL
+        {$ELSE}
+          FFI_DEFAULT_ABI := FFI_UNIX64
+        {$ENDIF}
       {$ENDIF}
     {$ENDIF}
 
@@ -109,7 +121,9 @@ type
     FFI_CTYPE_INT,
     FFI_CTYPE_FLOAT,
     FFI_CTYPE_DOUBLE,
+    {$IFDEF HAVE_LONG_DOUBLE}
     FFI_CTYPE_LONGDOUBLE,
+    {$ENDIF}
     FFI_CTYPE_UINT8,
     FFI_CTYPE_SINT8,
     FFI_CTYPE_UINT16,
@@ -150,7 +164,7 @@ type
 const
   FFI_TRAMPOLINE_SIZE =
     {$IFDEF WINDOWS}{$IFDEF CPU32}52{$ELSE}29{$ENDIF}{$ENDIF}
-    {$IFDEF LINUX}{$IFDEF CPU32}10{$ELSE}24{$ENDIF}{$ENDIF};
+    {$IFDEF LINUX}{$IFDEF CPUARM}20{$ELSE}{$IFDEF CPU32}10{$ELSE}24{$ENDIF}{$ENDIF}{$ENDIF};
 
 type
   TClosureBindingFunction = procedure(
@@ -222,7 +236,7 @@ var
   ffi_type_sint64: TFFIType;     {$IFDEF StaticFFI}cvar; external;{$ENDIF}
   ffi_type_float: TFFIType;      {$IFDEF StaticFFI}cvar; external;{$ENDIF}
   ffi_type_double: TFFIType;     {$IFDEF StaticFFI}cvar; external;{$ENDIF}
-  ffi_type_longdouble: TFFIType; {$IFDEF StaticFFI}cvar; external;{$ENDIF}
+  ffi_type_longdouble: TFFIType; {$IFDEF HAVE_LONG_DOUBLE}{$IFDEF StaticFFI}cvar; external;{$ENDIF}{$ENDIF}
   ffi_type_pointer: TFFIType;    {$IFDEF StaticFFI}cvar; external;{$ENDIF}
 
 function FFILoaded: Boolean;
@@ -284,7 +298,9 @@ type
   TFFIBaseType_SInt64     = specialize TFFIBaseType<cint64>;
   TFFIBaseType_Float      = specialize TFFIBaseType<cfloat>;
   TFFIBaseType_Double     = specialize TFFIBaseType<cdouble>;
+  {$IFDEF HAVE_LONG_DOUBLE}
   TFFIBaseType_LongDouble = specialize TFFIBaseType<clongdouble>;
+  {$ENDIF}
   TFFIBaseType_Pointer    = specialize TFFIBaseType<Pointer>;
 
 class function TFFIBaseType.getOffset: Integer;
@@ -370,7 +386,11 @@ initialization
   ffi_type_sint64     := TFFIBaseType_SInt64.getFFIType(FFI_CTYPE_SINT64);
   ffi_type_float      := TFFIBaseType_Float.getFFIType(FFI_CTYPE_FLOAT);
   ffi_type_double     := TFFIBaseType_Double.getFFIType(FFI_CTYPE_DOUBLE);
+  {$IFDEF HAVE_LONG_DOUBLE}
   ffi_type_longdouble := TFFIBaseType_LongDouble.getFFIType(FFI_CTYPE_LONGDOUBLE);
+  {$ELSE}
+  ffi_type_longdouble := ffi_type_double;
+  {$ENDIF}
   ffi_type_pointer    := TFFIBaseType_Pointer.getFFIType(FFI_CTYPE_POINTER);
   {$ENDIF}
 
