@@ -224,6 +224,8 @@ begin
           Continue
         else
           n := BaseName + '[' + IntToStr(i) + ']'
+        else
+          Continue
       else if (BaseName <> '') then
         n := BaseName + '.' + Name
       else
