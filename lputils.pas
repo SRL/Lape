@@ -70,6 +70,7 @@ begin
 
     if (psiFunctionWrappers in Initialize) then
       addDelayedCode(
+        LapeDelayedFlags +
         'function Chr(IntValue: UInt8):  AnsiChar; overload; begin Result := AnsiChar(IntValue); end;' + LineEnding +
         'function Chr(IntValue: UInt16): WideChar; overload; begin Result := WideChar(IntValue); end;' + LineEnding +
         'function StrGet(var s: string; Index: SizeInt): Char; begin Result := s[Index]; end;' + LineEnding +
@@ -96,6 +97,7 @@ begin
         'erInterfaceNotSupported, erCustomError)',
         'TIFException');
       addDelayedCode(
+        LapeDelayedFlags +
         'function ExceptionToString(Ex: TIFException; Param: string): string; begin '         +
           'Result := ToString(Ex);'                                                           +
           'if (Param <> '#39#39') then Result := Result + '#39'('#39' + Param + '#39')'#39';' +
@@ -108,44 +110,42 @@ end;
 function ExposeGlobals__GetPtr(v: TLapeGlobalVar; AName: lpString; Compiler: TLapeCompiler): lpString;
 begin
   Result := '';
-  if (not v.HasType()) or (v.VarType.EvalRes(op_Addr) = nil) or MethodOfObject(v.VarType) then
+
+  if (not v.HasType()) then
+    Exit
+  else if v.Writeable and (v.VarType.EvalRes(op_Addr) <> nil) then
+    Result := '@'
+  else if (not (v.VarType is TLapeType_Method)) then
     Exit;
 
-  if v.Writeable then
-    Result := '@';
-  if (v.VarType is TLapeType_Method) then
-    Result := Result + AIA;
-
-  if (Result <> '') then
-  begin
-    AName := LapeCase(AName);
-    Result := #39 + AName + #39': Result := ' + Result + AName + ';' + LineEnding;
-  end;
+  AName := LapeCase(AName);
+  Result := #39 + AName + #39': Result := ' + Result + AName + ';' + LineEnding;
 end;
 
 function ExposeGlobals__GetName(v: TLapeGlobalVar; AName: lpString; Compiler: TLapeCompiler): lpString;
 begin
   Result := '';
-  if (not v.HasType()) or (v.VarType.EvalRes(op_Addr) = nil) or MethodOfObject(v.VarType) then
+
+  if (not v.HasType()) then
+    Exit
+  else if v.Writeable and (v.VarType.EvalRes(op_Addr) <> nil) then
+    Result := '@' + AName
+  else if (v.VarType is TLapeType_Method) then
+    Result := 'Pointer(' + AName + ')'
+  else
     Exit;
 
-  if v.Writeable then
-    Result := '@';
-  if (v.VarType is TLapeType_Method) then
-    Result := Result + AIA;
-  if (Result <> '') then
-    Result := Result + AName + ': Result := '#39 + AName + #39';' + LineEnding;
+  Result := Result + ': Result := '#39 + AName + #39';' + LineEnding;
 end;
 
 function ExposeGlobals__GetVal(v: TLapeGlobalVar; AName: lpString; Compiler: TLapeCompiler): lpString;
 begin
   Result := '';
-  if (not v.HasType()) then
+  if (not v.HasType()) or (not v.Readable) or (not Compiler.getBaseType(ltVariant).CompatibleWith(v.VarType)) then
     Exit;
 
   AName := LapeCase(AName);
-  if Compiler.getBaseType(ltVariant).CompatibleWith(v.VarType) then
-    Result := #39 + AName + #39': Result := ' + AName + ';' + LineEnding;
+  Result := #39 + AName + #39': Result := ' + AName + ';' + LineEnding;
 end;
 
 function ExposeGlobals__Invoke(v: TLapeGlobalVar; AName: lpString; Compiler: TLapeCompiler): lpString;
@@ -198,9 +198,25 @@ begin
 end;
 
 function TraverseGlobals(Compiler: TLapeCompiler; Callback: TTraverseCallback; BaseName: lpString = ''; Decls: TLapeDeclarationList = nil): lpString;
+
+  function TraverseBaseTypes(Compiler: TLapeCompiler; Callback: TTraverseCallback): lpString;
+  var
+    BaseType: ELapeBaseType;
+    Typ: TLapeType;
+  begin
+    Result := '';
+    for BaseType := Succ(ltUnknown) to High(ELapeBaseType) do
+    begin
+      Typ := Compiler.getBaseType(BaseType);
+      if (Typ <> nil) then
+        Result := Result + TraverseGlobals(Compiler, Callback, Typ.Name, Typ.ManagedDeclarations);
+    end;
+  end;
+
 var
   i: Integer;
   n: lpString;
+  Decl: TLapeDeclaration;
 begin
   Result := '';
 
@@ -211,39 +227,44 @@ begin
     if (Compiler = nil) then
       Exit
     else
+    begin
+      Result := TraverseBaseTypes(Compiler, Callback);
       Decls := Compiler.GlobalDeclarations;
+    end;
 
   if Decls.HasParent() then
     TraverseGlobals(Compiler, Callback, BaseName, Decls.Parent);
 
-  for i := 0 to Decls.Items.Count - 1 do
-    with Decls.Items[i] do
+  for i := 0 to Decls.Count - 1 do
+  begin
+    Decl := Decls[i];
     try
-      if (Name = '') then
-        if (BaseName = '') then
-          Continue
-        else
+      if (Decl.Name = '') then
+        if (Decl is TLapeGlobalVar) and (TLapeGlobalVar(Decl).VarType is TLapeType_Method) then
           n := BaseName + '[' + IntToStr(i) + ']'
+        else
+          Continue
       else if (BaseName <> '') then
-        n := BaseName + '.' + Name
+        n := BaseName + '.' + Decl.Name
       else
-        n := Name;
+        n := Decl.Name;
 
       if (n = '') or (n[1] = '!') then
         Continue;
 
-      if (Decls.Items[i] is TLapeType) then
-        Result := Result + TraverseGlobals(Compiler, Callback, n, TLapeType(Decls.Items[i]).ManagedDeclarations)
-      else if (Decls.Items[i] is TLapeGlobalvar) then
-        with TLapeGlobalVar(Decls.Items[i]) do
+      if (Decl is TLapeType) then
+        Result := Result + TraverseGlobals(Compiler, Callback, n, TLapeType(Decl).ManagedDeclarations)
+      else if (Decl is TLapeGlobalvar) then
+        with TLapeGlobalVar(Decl) do
         begin
-          Result := Result + Callback(TLapeGlobalVar(Decls.Items[i]), n, Compiler);
+          Result := Result + Callback(TLapeGlobalVar(Decl), n, Compiler);
           if (VarType is TLapeType_Type) or (VarType is TLapeType_OverloadedMethod) then
             Result := Result + TraverseGlobals(Compiler, Callback, n, VarType.ManagedDeclarations);
         end;
     except
       {catch exception}
     end;
+  end;
 end;
 
 procedure ExposeGlobals(Compiler: TLapeCompiler; HeaderOnly, DoOverride: Boolean);
@@ -349,6 +370,7 @@ begin
     Exit;
 
   Compiler.addDelayedCode(
+    LapeDelayedFlags +
     GetGlobalPtr()  + LineEnding +
     GetGlobalName() + LineEnding +
     GetGlobalVal()  + LineEnding +

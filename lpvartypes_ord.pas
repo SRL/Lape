@@ -523,8 +523,8 @@ begin
     FRange.Lo := Value;
 
   for i := FMemberMap.Count to Value - 1 do
-    FMemberMap.add('');
-  FMemberMap.add(AName);
+    FMemberMap.Add('');
+  FMemberMap.Add(AName);
 
   FSmall := (FRange.Hi <= Ord(High(ELapeSmallEnum)));
   if (not FSmall) then
@@ -553,7 +553,7 @@ begin
     end;
   Result := Format(
     'type TEnumToString = private function(constref Arr; Index, Lo, Hi: System.Int32): System.string;' + LineEnding +
-    'begin Result := TEnumToString('+AIA+'System._EnumToString)([%s], System.Ord(Param0), %d, %d); end;',
+    'begin Result := TEnumToString(System._EnumToString)([%s], System.Ord(Param0), %d, %d); end;',
     [Result, FRange.Lo, FRange.Hi]
   );
 end;
@@ -646,7 +646,10 @@ begin
   begin
     Result := FCompiler.getBaseType(BaseIntType).EvalRes(Op, FCompiler.getBaseType(Right.BaseIntType), Flags);
     if (Result <> nil) and (not (op in CompareOperators)) then
-      Result := Self;
+      if (Result.BaseIntType = BaseIntType) then
+        Result := Self
+      else
+        Result := nil;
   end
   else
     Result := inherited;
@@ -655,7 +658,6 @@ end;
 function TLapeType_Enum.EvalConst(Op: EOperator; Left, Right: TLapeGlobalVar; Flags: ELapeEvalFlags): TLapeGlobalVar;
 var
   tmpType: TLapeType;
-  tmpRes: TLapeGlobalVar;
 begin
   Assert(FCompiler <> nil);
   Assert((Left = nil) or (Left.VarType = Self));
@@ -674,13 +676,7 @@ begin
       if (Result.VarType.BaseIntType = BaseIntType) then
         Result.VarType := Self
       else
-      try
-        tmpRes := Result;
-        Result := NewGlobalVarP();
-        Result := EvalConst(op_Assign, Result, tmpRes, []);
-      finally
-        FreeAndNil(tmpRes);
-      end;
+        LapeException(lpeImpossible);
   finally
     Left.VarType := Self;
     Right.VarType := tmpType;
@@ -690,38 +686,24 @@ begin
 end;
 
 function TLapeType_Enum.Eval(Op: EOperator; var Dest: TResVar; Left, Right: TResVar; Flags: ELapeEvalFlags; var Offset: Integer; Pos: PDocPos = nil): TResVar;
-var
-  tmpVar, tmpDest: TResVar;
 begin
   Assert(FCompiler <> nil);
   Assert(Left.VarType = Self);
 
   if Right.HasType() and EvalAsSubType(Op, Right.VarType) then
   begin
-    tmpVar := NullResVar;
-    tmpDest := NullResVar;
     if (not IsOrdinal()) or (not Right.HasType()) or (not Right.VarType.IsOrdinal()) then
       LapeException(lpeInvalidEvaluation);
 
     Left.VarType := FCompiler.getBaseType(BaseIntType);
     Right.VarType := FCompiler.getBaseType(Right.VarType.BaseIntType);
 
-    if Dest.HasType() and Equals(Dest.VarType) then
-      tmpDest := Dest;
     Result := Left.VarType.Eval(Op, Dest, Left, Right, Flags, Offset, Pos);
     if Result.HasType() and (not (op in CompareOperators)) then
       if (Result.VarType.BaseIntType = BaseIntType) then
         Result.VarType := Self
       else
-      begin
-        Dest := tmpDest;
-        tmpDest := Result;
-        Result := NullResVar;
-        Result.VarType := Self;
-        FCompiler.getDestVar(Dest, Result, op_Unknown);
-        Result := Eval(op_Assign, tmpVar, Result, tmpDest, [], Offset, Pos);
-        tmpDest.Spill(1);
-      end;
+        LapeException(lpeImpossible);
   end
   else
     Result := inherited;
@@ -898,10 +880,10 @@ begin
 
   Result := 'type TSetToString = private function(constref ASet; AToString: System.Pointer; Lo, Hi: System.Int32): System.string;' + LineEnding + 'begin ';
   if FSmall then
-    Result := Result + 'Result := TSetToString('+AIA+'System._SmallSetToString)'
+    Result := Result + 'Result := TSetToString(System._SmallSetToString)'
   else
-    Result := Result + 'Result := TSetToString('+AIA+'System._LargeSetToString)';
-  Result := Format(Result + '(Param0, '+AIA+'System.ToString[%d], %d, %d); end;', [Index, FRange.Range.Lo, FRange.Range.Hi]);
+    Result := Result + 'Result := TSetToString(System._LargeSetToString)';
+  Result := Format(Result + '(Param0, System.ToString[%d], %d, %d); end;', [Index, FRange.Range.Lo, FRange.Range.Hi]);
 end;
 
 function TLapeType_Set.VarToString(AVar: Pointer): lpString;

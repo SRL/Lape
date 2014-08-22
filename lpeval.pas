@@ -35,11 +35,11 @@ procedure _LapeRaiseString(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;
 procedure _LapeRaiseStringEx(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 procedure _LapeAssert(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 procedure _LapeAssertMsg(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
+procedure _LapeRangeCheck(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 
 procedure _LapeGetMem(const Params: PParamArray; const Result: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 procedure _LapeAllocMem(const Params: PParamArray; const Result: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 procedure _LapeFreeMem(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
-procedure _LapeFreeMemSize(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 procedure _LapeReallocMem(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 procedure _LapeFillMem(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 procedure _LapeMove(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
@@ -113,8 +113,7 @@ function LapeEval_GetRes(Op: EOperator; Left, Right: ELapeBaseType): ELapeBaseTy
 function LapeEval_GetProc(Op: EOperator; Left, Right: ELapeBaseType): TLapeEvalProc;
 
 const
-  //AutoInvokeAddress
-  AIA = '{$IFDEF AUTOINVOKE}@{$ENDIF}';
+  LapeDelayedFlags = '{$ASSERTIONS ON}{$BOOLEVAL ON}{$RANGECHECKS OFF}{$AUTOINVOKE OFF}{$LOOSESEMICOLON OFF}{$EXTENDEDSYNTAX OFF}';
 
 var
   LapeEvalErrorProc: TLapeEvalProc = {$IFDEF FPC}@{$ENDIF}LapeEval_Error;
@@ -137,12 +136,13 @@ var
     'end;';
 
   _LapeToString_Set: lpString =
-    'function _%sSetToString(ASet, AToString: Pointer; Lo, Hi: Int32): string;'          + LineEnding +
+    'function _%sSetToString(ASet: Pointer;'                                             + LineEnding +
+    '  AToString: function(constref Enum): string;'                                      + LineEnding +
+    '  Lo, Hi: Int32): string;'                                                          + LineEnding +
     'type'                                                                               + LineEnding +
     '  TEnum = (se0, se1 = %d);'                                                         + LineEnding +
     '  TSet = set of TEnum;'                                                             + LineEnding +
     '  PSet = ^TSet;'                                                                    + LineEnding +
-    '  TToString = function(constref Enum: TEnum): string;'                                 + LineEnding +
     'var'                                                                                + LineEnding +
     '  e: TEnum;'                                                                        + LineEnding +
     'begin'                                                                              + LineEnding +
@@ -152,7 +152,7 @@ var
     '    begin'                                                                          + LineEnding +
     '      if (Result <> '#39#39') then'                                                 + LineEnding +
     '        Result := Result + '#39', '#39';'                                           + LineEnding +
-    '      Result := Result + TToString(AToString)(e);'                                  + LineEnding +
+    '      Result := Result + AToString(e);'                                             + LineEnding +
     '    end;'                                                                           + LineEnding +
     '  Result := '#39'['#39'+Result+'#39']'#39';'                                        + LineEnding +
     'end;';
@@ -230,7 +230,7 @@ var
     '      Exit;'                                                                        + LineEnding +
     '    end;'                                                                           + LineEnding +
     ''                                                                                   + LineEnding +
-    '    if (NewLen < OldLen) and (Pointer('+AIA+'Dispose) <> nil) then'                 + LineEnding +
+    '    if (NewLen < OldLen) and (Pointer(Dispose) <> nil) then'                        + LineEnding +
     '    begin'                                                                          + LineEnding +
     '      Inc(p, HeaderSize);'                                                          + LineEnding +
     '      for i := NewLen * ElSize to (OldLen - 1) * ElSize with ElSize do'             + LineEnding +
@@ -257,7 +257,7 @@ var
     '  begin'                                                                            + LineEnding +
     '    Dec(PtrInt(p^));'                                                               + LineEnding +
     '    NewP := nil;'                                                                   + LineEnding +
-    '    _ArraySetLength(NewP, NewLen, ElSize, '+AIA+'Dispose, '+AIA+'Copy);'            + LineEnding +
+    '    _ArraySetLength(NewP, NewLen, ElSize, Dispose, Copy);'                          + LineEnding +
     ''                                                                                   + LineEnding +
     '    i := OldLen;'                                                                   + LineEnding +
     '    if (NewLen < OldLen) then'                                                      + LineEnding +
@@ -265,7 +265,7 @@ var
     '    if (i >= 1) then'                                                               + LineEnding +
     '    begin'                                                                          + LineEnding +
     '      Inc(p, HeaderSize);'                                                          + LineEnding +
-    '      if (Pointer('+AIA+'Copy) = nil) then'                                         + LineEnding +
+    '      if (Pointer(Copy) = nil) then'                                                + LineEnding +
     '        Move(p^, NewP^, i * ElSize)'                                                + LineEnding +
     '      else for i := (i - 1) * ElSize downto 0 with ElSize do'                       + LineEnding +
     '        Copy(p[i], NewP[i]);'                                                       + LineEnding +
@@ -295,7 +295,7 @@ var
     '  _ArraySetLength(Result, Count, ElSize, nil, nil);'                                + LineEnding +
     '  Inc(p, Start * ElSize);'                                                          + LineEnding +
     ''                                                                                   + LineEnding +
-    '  if (Pointer('+AIA+'Copy) = nil) then'                                             + LineEnding +
+    '  if (Pointer(Copy) = nil) then'                                                    + LineEnding +
     '    Move(p^, Result^, Count * ElSize)'                                              + LineEnding +
     '  else'                                                                             + LineEnding +
     '    for i := 0 to (Count - 1) * ElSize with ElSize do'                              + LineEnding +
@@ -323,10 +323,10 @@ var
     '  else if (Start + Int64(Count) > Len) then'                                        + LineEnding +
     '    Count := Len - Start;'                                                          + LineEnding +
     ''                                                                                   + LineEnding +
-    '  _ArraySetLength(p, Len, ElSize, '+AIA+'Dispose, '+AIA+'Copy);'                    + LineEnding +
+    '  _ArraySetLength(p, Len, ElSize, Dispose, Copy);'                                  + LineEnding +
     '  Inc(p, Start * ElSize);'                                                          + LineEnding +
     ''                                                                                   + LineEnding +
-    '  if (Pointer('+AIA+'Dispose) <> nil) then'                                         + LineEnding +
+    '  if (Pointer(Dispose) <> nil) then'                                                + LineEnding +
     '    for i := 0 to (Count - 1) * ElSize with ElSize do'                              + LineEnding +
     '      Dispose(p[i]);'                                                               + LineEnding +
     ''                                                                                   + LineEnding +
@@ -362,12 +362,12 @@ var
     '  else if (Start + Int64(Count) > LenDst) then'                                     + LineEnding +
     '    Count := LenDst - Start;'                                                       + LineEnding +
     ''                                                                                   + LineEnding +
-    '  _ArraySetLength(Dst, LenDst + LenSrc, ElSize, '+AIA+'Dispose, '+AIA+'Copy);'      + LineEnding +
+    '  _ArraySetLength(Dst, LenDst + LenSrc, ElSize, Dispose, Copy);'                    + LineEnding +
     '  Inc(Dst, Start * ElSize);'                                                        + LineEnding +
     ''                                                                                   + LineEnding +
     '  if (Count <> LenSrc) then'                                                        + LineEnding +
     '  begin'                                                                            + LineEnding +
-    '    if (Count > LenSrc) and (Pointer('+AIA+'Dispose) <> nil) then'                  + LineEnding +
+    '    if (Count > LenSrc) and (Pointer(Dispose) <> nil) then'                         + LineEnding +
     '      for i := LenSrc * ElSize to (Count - 1) * ElSize with ElSize do'              + LineEnding +
     '        Dispose(Dst[i]);'                                                           + LineEnding +
     ''                                                                                   + LineEnding +
@@ -377,12 +377,12 @@ var
     '      (LenDst - Start - Count) * ElSize'                                            + LineEnding +
     '    );'                                                                             + LineEnding +
     ''                                                                                   + LineEnding +
-    '    if (LenSrc > Count) and (Pointer('+AIA+'Copy) <> nil) then'                     + LineEnding +
+    '    if (LenSrc > Count) and (Pointer(Copy) <> nil) then'                            + LineEnding +
     '      FillMem(Dst[Count * ElSize]^, (LenSrc - Count) * ElSize);'                    + LineEnding +
     '  end;'                                                                             + LineEnding +
     ''                                                                                   + LineEnding +
     '  if (LenSrc > 0) then'                                                             + LineEnding +
-    '    if (Pointer('+AIA+'Copy) = nil) then'                                           + LineEnding +
+    '    if (Pointer(Copy) = nil) then'                                                 + LineEnding +
     '      Move(Src^, Dst^, LenSrc * ElSize)'                                            + LineEnding +
     '    else for i := 0 to (LenSrc - 1) * ElSize with ElSize do'                        + LineEnding +
     '      Copy(Src[i], Dst[i]);'                                                        + LineEnding +
@@ -500,6 +500,12 @@ begin
     LapeExceptionFmt(lpeAssertionFailureMsg, [PlpString(Params^[1])^]);
 end;
 
+procedure _LapeRangeCheck(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
+begin
+  if (PInt32(Params^[0])^ < PInt32(Params^[1])^) or (PInt32(Params^[0])^ > PInt32(Params^[2])^) then
+    LapeException(lpeOutOfTypeRange);
+end;
+
 procedure _LapeGetMem(const Params: PParamArray; const Result: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 begin
   GetMem(PPointer(Result)^, PInt32(Params^[0])^);
@@ -513,11 +519,6 @@ end;
 procedure _LapeFreeMem(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
 begin
   FreeMem(PPointer(Params^[0])^);
-end;
-
-procedure _LapeFreeMemSize(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
-begin
-  FreeMem(PPointer(Params^[0])^, PInt32(Params^[1])^);
 end;
 
 procedure _LapeReallocMem(const Params: PParamArray); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
