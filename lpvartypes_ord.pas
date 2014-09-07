@@ -702,7 +702,7 @@ begin
     if Result.HasType() and (not (op in CompareOperators)) then
       if (Result.VarType.BaseIntType = BaseIntType) then
         Result.VarType := Self
-      else
+      else if (BaseType <> ltBoolean) then
         LapeException(lpeImpossible);
   end
   else
