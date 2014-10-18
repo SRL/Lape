@@ -2721,6 +2721,14 @@ Arr[op_PlusAsgn][ltShortString][ltVariant] := ltShortString;
 Arr[op_PlusAsgn][ltShortString][ltAnsiChar] := ltShortString;
 Arr[op_PlusAsgn][ltShortString][ltWideChar] := ltShortString;
 
+Arr[op_IN][ltShortString][ltShortString] := ltEvalBool;
+Arr[op_IN][ltAnsiString][ltShortString] := ltEvalBool;
+Arr[op_IN][ltWideString][ltShortString] := ltEvalBool;
+Arr[op_IN][ltUnicodeString][ltShortString] := ltEvalBool;
+Arr[op_IN][ltVariant][ltShortString] := ltEvalBool;
+Arr[op_IN][ltWideChar][ltShortString] := ltEvalBool;
+Arr[op_IN][ltAnsiChar][ltShortString] := ltEvalBool;
+
 //AnsiString
 Arr[op_cmp_Equal][ltAnsiString][ltShortString] := ltEvalBool;
 Arr[op_cmp_Equal][ltAnsiString][ltAnsiString] := ltEvalBool;
@@ -2787,6 +2795,14 @@ Arr[op_PlusAsgn][ltAnsiString][ltUnicodeString] := ltAnsiString;
 Arr[op_PlusAsgn][ltAnsiString][ltVariant] := ltAnsiString;
 Arr[op_PlusAsgn][ltAnsiString][ltAnsiChar] := ltAnsiString;
 Arr[op_PlusAsgn][ltAnsiString][ltWideChar] := ltAnsiString;
+
+Arr[op_IN][ltShortString][ltAnsiString] := ltEvalBool;
+Arr[op_IN][ltAnsiString][ltAnsiString] := ltEvalBool;
+Arr[op_IN][ltWideString][ltAnsiString] := ltEvalBool;
+Arr[op_IN][ltUnicodeString][ltAnsiString] := ltEvalBool;
+Arr[op_IN][ltVariant][ltAnsiString] := ltEvalBool;
+Arr[op_IN][ltWideChar][ltAnsiString] := ltEvalBool;
+Arr[op_IN][ltAnsiChar][ltAnsiString] := ltEvalBool;
 
 //WideString
 Arr[op_cmp_Equal][ltWideString][ltShortString] := ltEvalBool;
@@ -2855,6 +2871,15 @@ Arr[op_PlusAsgn][ltWideString][ltVariant] := ltWideString;
 Arr[op_PlusAsgn][ltWideString][ltWideChar] := ltWideString;
 Arr[op_PlusAsgn][ltWideString][ltAnsiChar] := ltWideString;
 
+Arr[op_IN][ltShortString][ltWideString] := ltEvalBool;
+Arr[op_IN][ltAnsiString][ltWideString] := ltEvalBool;
+Arr[op_IN][ltWideString][ltWideString] := ltEvalBool;
+Arr[op_IN][ltUnicodeString][ltWideString] := ltEvalBool;
+Arr[op_IN][ltVariant][ltWideString] := ltEvalBool;
+Arr[op_IN][ltWideChar][ltWideString] := ltEvalBool;
+Arr[op_IN][ltAnsiChar][ltWideString] := ltEvalBool;
+
+
 //UnicodeString
 Arr[op_cmp_Equal][ltUnicodeString][ltShortString] := ltEvalBool;
 Arr[op_cmp_Equal][ltUnicodeString][ltAnsiString] := ltEvalBool;
@@ -2921,6 +2946,14 @@ Arr[op_PlusAsgn][ltUnicodeString][ltUnicodeString] := ltUnicodeString;
 Arr[op_PlusAsgn][ltUnicodeString][ltVariant] := ltUnicodeString;
 Arr[op_PlusAsgn][ltUnicodeString][ltWideChar] := ltUnicodeString;
 Arr[op_PlusAsgn][ltUnicodeString][ltAnsiChar] := ltUnicodeString;
+
+Arr[op_IN][ltShortString][ltUnicodeString] := ltEvalBool;
+Arr[op_IN][ltAnsiString][ltUnicodeString] := ltEvalBool;
+Arr[op_IN][ltWideString][ltUnicodeString] := ltEvalBool;
+Arr[op_IN][ltUnicodeString][ltUnicodeString] := ltEvalBool;
+Arr[op_IN][ltVariant][ltUnicodeString] := ltEvalBool;
+Arr[op_IN][ltWideChar][ltUnicodeString] := ltEvalBool;
+Arr[op_IN][ltAnsiChar][ltUnicodeString] := ltEvalBool;
 
 //AnsiChar
 Arr[op_cmp_Equal][ltAnsiChar][ltAnsiChar] := Arr[op_cmp_Equal][ltUInt8][ltUInt8];

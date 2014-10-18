@@ -2723,6 +2723,15 @@ Arr[op_PlusAsgn][ltShortString][ltVariant] := @lpeSString_ADDASGN_Variant;
 Arr[op_PlusAsgn][ltShortString][ltAnsiChar] := @lpeSString_ADDASGN_AChar;
 Arr[op_PlusAsgn][ltShortString][ltWideChar] := @lpeSString_ADDASGN_WChar;
 
+Arr[op_IN][ltShortString][ltShortString] := @lpeSString_IN_SString;
+Arr[op_IN][ltAnsiString][ltShortString] := @lpeAString_IN_SString;
+Arr[op_IN][ltWideString][ltShortString] := @lpeWString_IN_SString;
+Arr[op_IN][ltUnicodeString][ltShortString] := @lpeUString_IN_SString;
+Arr[op_IN][ltVariant][ltShortString] := @lpeAChar_IN_SString;
+Arr[op_IN][ltWideChar][ltShortString] := @lpeVariant_IN_SString;
+Arr[op_IN][ltAnsiChar][ltShortString] := @lpeWChar_IN_SString;
+
+
 //AnsiString
 Arr[op_cmp_Equal][ltAnsiString][ltShortString] := @lpeAString_EQ_SString;
 Arr[op_cmp_Equal][ltAnsiString][ltAnsiString] := @lpeAString_EQ_AString;
@@ -2789,6 +2798,15 @@ Arr[op_PlusAsgn][ltAnsiString][ltUnicodeString] := @lpeAString_ADDASGN_UString;
 Arr[op_PlusAsgn][ltAnsiString][ltVariant] := @lpeAString_ADDASGN_Variant;
 Arr[op_PlusAsgn][ltAnsiString][ltAnsiChar] := @lpeAString_ADDASGN_AChar;
 Arr[op_PlusAsgn][ltAnsiString][ltWideChar] := @lpeAString_ADDASGN_WChar;
+
+Arr[op_IN][ltShortString][ltAnsiString] := @lpeSString_IN_AString;
+Arr[op_IN][ltAnsiString][ltAnsiString] := @lpeAString_IN_AString;
+Arr[op_IN][ltWideString][ltAnsiString] := @lpeWString_IN_AString;
+Arr[op_IN][ltUnicodeString][ltAnsiString] := @lpeUString_IN_AString;
+Arr[op_IN][ltVariant][ltAnsiString] := @lpeAChar_IN_AString;
+Arr[op_IN][ltWideChar][ltAnsiString] := @lpeVariant_IN_AString;
+Arr[op_IN][ltAnsiChar][ltAnsiString] := @lpeWChar_IN_AString;
+
 
 //WideString
 Arr[op_cmp_Equal][ltWideString][ltShortString] := @lpeWString_EQ_SString;
@@ -2857,6 +2875,15 @@ Arr[op_PlusAsgn][ltWideString][ltVariant] := @lpeWString_ADDASGN_Variant;
 Arr[op_PlusAsgn][ltWideString][ltWideChar] := @lpeWString_ADDASGN_WChar;
 Arr[op_PlusAsgn][ltWideString][ltAnsiChar] := @lpeWString_ADDASGN_AChar;
 
+Arr[op_IN][ltShortString][ltWideString] := @lpeSString_IN_WString;
+Arr[op_IN][ltAnsiString][ltWideString] := @lpeAString_IN_WString;
+Arr[op_IN][ltWideString][ltWideString] := @lpeWString_IN_WString;
+Arr[op_IN][ltUnicodeString][ltWideString] := @lpeUString_IN_WString;
+Arr[op_IN][ltVariant][ltWideString] := @lpeAChar_IN_WString;
+Arr[op_IN][ltWideChar][ltWideString] := @lpeVariant_IN_WString;
+Arr[op_IN][ltAnsiChar][ltWideString] := @lpeWChar_IN_WString;
+
+
 //UnicodeString
 Arr[op_cmp_Equal][ltUnicodeString][ltShortString] := @lpeUString_EQ_SString;
 Arr[op_cmp_Equal][ltUnicodeString][ltAnsiString] := @lpeUString_EQ_AString;
@@ -2923,6 +2950,15 @@ Arr[op_PlusAsgn][ltUnicodeString][ltUnicodeString] := @lpeUString_ADDASGN_UStrin
 Arr[op_PlusAsgn][ltUnicodeString][ltVariant] := @lpeUString_ADDASGN_Variant;
 Arr[op_PlusAsgn][ltUnicodeString][ltWideChar] := @lpeUString_ADDASGN_WChar;
 Arr[op_PlusAsgn][ltUnicodeString][ltAnsiChar] := @lpeUString_ADDASGN_AChar;
+
+Arr[op_IN][ltShortString][ltUnicodeString] := @lpeSString_IN_UString;
+Arr[op_IN][ltAnsiString][ltUnicodeString] := @lpeAString_IN_UString;
+Arr[op_IN][ltWideString][ltUnicodeString] := @lpeWString_IN_UString;
+Arr[op_IN][ltUnicodeString][ltUnicodeString] := @lpeUString_IN_UString;
+Arr[op_IN][ltVariant][ltUnicodeString] := @lpeAChar_IN_UString;
+Arr[op_IN][ltWideChar][ltUnicodeString] := @lpeVariant_IN_UString;
+Arr[op_IN][ltAnsiChar][ltUnicodeString] := @lpeWChar_IN_UString;
+
 
 //AnsiChar
 Arr[op_cmp_Equal][ltAnsiChar][ltAnsiChar] := Arr[op_cmp_Equal][ltUInt8][ltUInt8];

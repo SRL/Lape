@@ -2706,6 +2706,15 @@ procedure lpeSString_ADDASGN_Variant(const Dest, Left, Right: Pointer); {$IFDEF 
 procedure lpeSString_ADDASGN_AChar(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PShortString(Left)^ := PShortString(Left)^ + PAnsiChar(Right)^; PShortString(Dest)^ := PShortString(Left)^; end;
 procedure lpeSString_ADDASGN_WChar(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PShortString(Left)^ := PShortString(Left)^ + PWideChar(Right)^; PShortString(Dest)^ := PShortString(Left)^; end;
 
+procedure lpeSString_IN_SString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PShortString(Left)^, PShortString(Right)^) <> 0; end;
+procedure lpeAString_IN_SString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PAnsiString(Left)^, PShortString(Right)^) <> 0; end;
+procedure lpeWString_IN_SString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PWideString(Left)^, PShortString(Right)^) <> 0; end;
+procedure lpeUString_IN_SString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PUnicodeString(Left)^, PShortString(Right)^) <> 0; end;
+procedure lpeVariant_IN_SString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PVariant(Left)^, PShortString(Right)^) <> 0; end;
+procedure lpeAChar_IN_SString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PAnsiChar(Left)^, PShortString(Right)^) <> 0; end;
+procedure lpeWChar_IN_SString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PWideChar(Left)^, PShortString(Right)^) <> 0; end;
+
+
 //AnsiString
 procedure lpeAString_EQ_SString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := PAnsiString(Left)^ = PShortString(Right)^; end;
 procedure lpeAString_EQ_AString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := PAnsiString(Left)^ = PAnsiString(Right)^; end;
@@ -2773,6 +2782,15 @@ procedure lpeAString_ADDASGN_Variant(const Dest, Left, Right: Pointer); {$IFDEF 
 procedure lpeAString_ADDASGN_AChar(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PAnsiString(Left)^ := PAnsiString(Left)^ + PAnsiChar(Right)^;  PAnsiString(Dest)^ := PAnsiString(Left)^; end;
 procedure lpeAString_ADDASGN_WChar(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PAnsiString(Left)^ := PAnsiString(Left)^ + PWideChar(Right)^;  PAnsiString(Dest)^ := PAnsiString(Left)^; end;
 
+procedure lpeSString_IN_AString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PShortString(Left)^, PAnsiString(Right)^) <> 0; end;
+procedure lpeAString_IN_AString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PAnsiString(Left)^, PAnsiString(Right)^) <> 0; end;
+procedure lpeWString_IN_AString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PWideString(Left)^, PAnsiString(Right)^) <> 0; end;
+procedure lpeUString_IN_AString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PUnicodeString(Left)^, PAnsiString(Right)^) <> 0; end;
+procedure lpeVariant_IN_AString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PVariant(Left)^, PAnsiString(Right)^) <> 0; end;
+procedure lpeAChar_IN_AString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PAnsiChar(Left)^, PAnsiString(Right)^) <> 0; end;
+procedure lpeWChar_IN_AString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PWideChar(Left)^, PAnsiString(Right)^) <> 0; end;
+
+
 //WideString
 procedure lpeWString_EQ_SString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := PWideString(Left)^ = PShortString(Right)^; end;
 procedure lpeWString_EQ_AString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := PWideString(Left)^ = PAnsiString(Right)^; end;
@@ -2833,12 +2851,21 @@ procedure lpeWString_ADD_WChar(const Dest, Left, Right: Pointer); {$IFDEF Lape_C
 procedure lpeWString_ADD_AChar(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PWideString(Dest)^ := PWideString(Left)^ + PAnsiChar(Right)^; end;
 
 procedure lpeWString_ADDASGN_SString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PWideString(Left)^ := PWideString(Left)^ + PShortString(Right)^;  PWideString(Dest)^ := PWideString(Left)^; end;
-procedure lpeWString_ADDASGN_AString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PWideString(Left)^ := PWideString(Left)^ + PAnsiString(Right)^; end;
-procedure lpeWString_ADDASGN_WString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PWideString(Left)^ := PWideString(Left)^ + PWideString(Right)^; end;
-procedure lpeWString_ADDASGN_UString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PWideString(Left)^ := PWideString(Left)^ + PUnicodeString(Right)^; end;
-procedure lpeWString_ADDASGN_Variant(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PWideString(Left)^ := PWideString(Left)^ + PVariant(Right)^; end;
-procedure lpeWString_ADDASGN_WChar(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PWideString(Left)^ := PWideString(Left)^ + PWideChar(Right)^; end;
-procedure lpeWString_ADDASGN_AChar(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PWideString(Left)^ := PWideString(Left)^ + PAnsiChar(Right)^; end;
+procedure lpeWString_ADDASGN_AString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PWideString(Left)^ := PWideString(Left)^ + PAnsiString(Right)^;  PWideString(Dest)^ := PWideString(Left)^; end;
+procedure lpeWString_ADDASGN_WString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PWideString(Left)^ := PWideString(Left)^ + PWideString(Right)^;  PWideString(Dest)^ := PWideString(Left)^; end;
+procedure lpeWString_ADDASGN_UString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PWideString(Left)^ := PWideString(Left)^ + PUnicodeString(Right)^;  PWideString(Dest)^ := PWideString(Left)^; end;
+procedure lpeWString_ADDASGN_Variant(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PWideString(Left)^ := PWideString(Left)^ + PVariant(Right)^;  PWideString(Dest)^ := PWideString(Left)^; end;
+procedure lpeWString_ADDASGN_WChar(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PWideString(Left)^ := PWideString(Left)^ + PWideChar(Right)^;  PWideString(Dest)^ := PWideString(Left)^; end;
+procedure lpeWString_ADDASGN_AChar(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PWideString(Left)^ := PWideString(Left)^ + PAnsiChar(Right)^;  PWideString(Dest)^ := PWideString(Left)^; end;
+
+procedure lpeSString_IN_WString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PShortString(Left)^, PWideString(Right)^) <> 0; end;
+procedure lpeAString_IN_WString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PAnsiString(Left)^, PWideString(Right)^) <> 0; end;
+procedure lpeWString_IN_WString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PWideString(Left)^, PWideString(Right)^) <> 0; end;
+procedure lpeUString_IN_WString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PUnicodeString(Left)^, UnicodeString(PWideString(Right)^)) <> 0; end;
+procedure lpeVariant_IN_WString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PVariant(Left)^, PWideString(Right)^) <> 0; end;
+procedure lpeAChar_IN_WString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PAnsiChar(Left)^, PWideString(Right)^) <> 0; end;
+procedure lpeWChar_IN_WString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PWideChar(Left)^, PWideString(Right)^) <> 0; end;
+
 
 //UnicodeString
 procedure lpeUString_EQ_SString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := PUnicodeString(Left)^ = PShortString(Right)^; end;
@@ -2906,6 +2933,15 @@ procedure lpeUString_ADDASGN_UString(const Dest, Left, Right: Pointer); {$IFDEF 
 procedure lpeUString_ADDASGN_Variant(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PUnicodeString(Left)^ := PUnicodeString(Left)^ + PVariant(Right)^; PUnicodeString(Dest)^ := PUnicodeString(Left)^; end;
 procedure lpeUString_ADDASGN_WChar(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PUnicodeString(Left)^ := PUnicodeString(Left)^ + PWideChar(Right)^; PUnicodeString(Dest)^ := PUnicodeString(Left)^; end;
 procedure lpeUString_ADDASGN_AChar(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PUnicodeString(Left)^ := PUnicodeString(Left)^ + PAnsiChar(Right)^; PUnicodeString(Dest)^ := PUnicodeString(Left)^; end;
+
+procedure lpeSString_IN_UString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PShortString(Left)^, PUnicodeString(Right)^) <> 0; end;
+procedure lpeAString_IN_UString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PAnsiString(Left)^, PUnicodeString(Right)^) <> 0; end;
+procedure lpeWString_IN_UString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(UnicodeString(PWideString(Left)^), PUnicodeString(Right)^) <> 0; end;
+procedure lpeUString_IN_UString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PUnicodeString(Left)^, PUnicodeString(Right)^) <> 0; end;
+procedure lpeVariant_IN_UString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PVariant(Left)^, PUnicodeString(Right)^) <> 0; end;
+procedure lpeAChar_IN_UString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PAnsiChar(Left)^, PUnicodeString(Right)^) <> 0; end;
+procedure lpeWChar_IN_UString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := Pos(PWideChar(Left)^, PUnicodeString(Right)^) <> 0; end;
+
 
 //AnsiChar
 procedure lpeAChar_EQ_SString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := PAnsiChar(Left)^ = PShortString(Right)^; end;
