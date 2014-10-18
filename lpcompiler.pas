@@ -2205,24 +2205,28 @@ var
   begin
     DocPos := Tokenizer.DocPos;
     case Tokenizer.Tok of
-      tk_typ_String: Str := getString();
+      tk_typ_String, tk_typ_HereString: Str := getString();
       tk_typ_Char: Str := Tokenizer.TokChar;
       else LapeException(lpeImpossible);
     end;
-    while isNext([tk_typ_String, tk_typ_Char], Token) do
+    while isNext([tk_typ_HereString, tk_typ_String, tk_typ_Char], Token) do
     begin
       case Token of
-        tk_typ_String:
+        tk_typ_String, tk_typ_HereString:
           if (Tokenizer.LastTok = tk_typ_String) then
             Str := Str + #39 + getString()
+          else if (Tokenizer.LastTok = tk_typ_HereString) then
+            Str := Str + #34 + getString()
           else
             Str := Str + getString();
-        tk_typ_Char: Str := Str + Tokenizer.TokChar;
-        else LapeException(lpeImpossible);
+        tk_typ_Char: 
+          Str := Str + Tokenizer.TokChar;
+        else 
+          LapeException(lpeImpossible);
       end;
       ForceString := True;
     end;
-
+      
     if (Length(Str) = 1) and (not ForceString) then
       PushVarStack(TLapeTree_Char.Create(WideChar(Str[1]), Self, @DocPos))
     else
@@ -2400,7 +2404,7 @@ begin
         tk_typ_Integer_Bin: PushVarStack(TLapeTree_Integer.Create(UIntToStr(Tokenizer.TokUInt64), Self, getPDocPos()));
         tk_typ_Float: PushVarStack(TLapeTree_Float.Create(Tokenizer.TokString, Self, getPDocPos()));
         tk_typ_Char,
-        tk_typ_String: ParseAndPushString();
+        tk_typ_String, tk_typ_HereString: ParseAndPushString();
 
         tk_Identifier:
           begin

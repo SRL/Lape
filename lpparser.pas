@@ -123,6 +123,7 @@ type
     tk_typ_Integer_Hex,
     tk_typ_Integer_Bin,
     tk_typ_String,
+    tk_typ_HereString,
     tk_typ_Char);
   EParserTokenSet = set of EParserToken;
 
@@ -752,6 +753,7 @@ end;
 function TLapeTokenizerBase.Identify: EParserToken;
 var
   Char: lpChar;
+  TmpDocPos:TDocPos;
 
   procedure NextPos_CountLines;
   begin
@@ -995,10 +997,21 @@ begin
           Result := setTok(tk_Unkown);
       end;
     'A'..'Z', '_', 'a'..'z': Result := Alpha();
+    #34: //heredoc string
+      begin
+        Inc(FPos);
+        TmpDocPos := DocPos;
+        while (not (CurChar in [#34, #0])) do NextPos_CountLines();
+        if (CurChar in [#0]) then
+          LapeExceptionFmt(lpeMissingStringEnding, ['EOF'], TmpDocPos);
+        Result := setTok(tk_typ_HereString);
+      end;
     #39:
       begin
         Inc(FPos);
-        while (not (CurChar in [#39, #0])) do NextPos_CountLines();
+        while (not (CurChar in [#39, #0, #13, #10])) do Inc(FPos);
+        if not (CurChar in [#39]) then
+          LapeExceptionFmt(lpeMissingStringEnding, ['EOL'], DocPos);
         Result := setTok(tk_typ_String);
       end;
     '#':
