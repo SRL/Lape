@@ -330,7 +330,7 @@ begin
     Result := FPType
   else if (op = op_Assign) and (BaseType = ltDynArray) and HasType() and (ARight <> nil) and (ARight is ClassType) and FPType.Equals(TLapeType_DynArray(ARight).FPType) then
     Result := Self
-  else if (op = op_Plus) and (BaseType = ltDynArray) and HasType() and FPType.CompatibleWith(ARight) then
+  else if (op in [op_Plus, op_PlusAsgn]) and (BaseType = ltDynArray) and HasType() and FPType.CompatibleWith(ARight) then
     Result := Self
   else
     Result := inherited;
@@ -650,6 +650,11 @@ begin
     IndexVar.Spill(1);
     if wasConstant then
       Result.Writeable := False;
+  end
+  else if (op = op_PlusAsgn) and (BaseType = ltDynArray) and HasType() and FPType.CompatibleWith(ARight.VarType) then
+  begin
+    Dest := NullResVar;
+    Result := Eval(op_Plus, ALeft, ALeft, ARight, [], Offset, Pos);
   end
   else
     Result := inherited;

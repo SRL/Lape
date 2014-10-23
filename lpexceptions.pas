@@ -71,6 +71,7 @@ resourcestring
   lpeInvalidWithReference = 'Invalid with-reference';
   lpeLostClosingParenthesis = 'Found closing parenthesis without matching opening parenthesis';
   lpeLostConditional = 'Found conditional without matching opening statement';
+  lpeMissingStringEnding = '%s while scanning string literal';
   lpeNoDefaultForParam = 'No default value for parameter %d found';
   lpeNoForwardMatch = 'Forwarded declaration doesn''t match';
   lpeNoOverloadedMethod = 'Don''t know which overloaded method to call with params (%s)';
