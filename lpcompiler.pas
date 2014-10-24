@@ -2212,10 +2212,13 @@ var
     while isNext([tk_typ_HereString, tk_typ_String, tk_typ_Char], Token) do
     begin
       case Token of
-        tk_typ_String, tk_typ_HereString:
+        tk_typ_String:
           if (Tokenizer.LastTok = tk_typ_String) then
             Str := Str + #39 + getString()
-          else if (Tokenizer.LastTok = tk_typ_HereString) then
+          else
+            Str := Str + getString();
+        tk_typ_HereString:
+          if (Tokenizer.LastTok = tk_typ_HereString) then
             Str := Str + #34 + getString()
           else
             Str := Str + getString();
