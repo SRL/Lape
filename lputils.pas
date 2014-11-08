@@ -197,6 +197,91 @@ begin
   end;
 end;
 
+function ExposeGlobals__InvokeEx(v: TLapeGlobalVar; AName: lpString; Compiler: TLapeCompiler): lpString;
+var
+  VariantType: TLapeType;
+
+  function ParamsCompatible(Params: TLapeParameterList): Boolean;
+  var
+    i: Integer;
+  begin
+    Result := True;
+    for i := 0 to Params.Count - 1 do
+      if (not (Params[i].ParType in Lape_ValParams)) then
+        Exit(False)
+      else if (not VariantType.CompatibleWith(Params[i].VarType)) then
+        Exit(False);
+  end;
+
+  function VaildMethod(Item: TLapeGlobalVar; out TheParams, TheResult: String): Boolean;
+  var
+    Params: TLapeParameterList;
+    Method_Result: TLapeType;
+    i: Integer;
+  begin
+    Result := False;
+    if (Item.Name = '') then
+      Exit();
+
+    if (Item.VarType <> nil) and (Item.VarType is TLapeType_Method) then
+    begin
+      Params := TLapeType_Method(Item.VarType).Params;
+      Method_Result := TLapeType_Method(Item.VarType).Res;
+      if (Params = nil) then
+        Exit();
+
+      TheResult := 'Result :=';
+      if (Method_Result = nil) or (not VariantType.CompatibleWith(Method_Result)) then
+        TheResult += ' Unassigned;';
+
+      if (ParamsCompatible(Params)) then
+      begin
+        Result := True;
+        TheParams := '(';
+        for i := 0 to Params.Count - 1 do
+        begin
+          if (i > 0) then
+            TheParams += ', ';
+          TheParams += 'Params[' + IntToStr(i) + ']';
+        end;
+        TheParams += ')';
+      end;
+    end;
+   end;
+
+var
+  i, C: Integer;
+  VType: TLapeType;
+  Decls: TLapeDeclarationList;
+  TempVar: TLapeGlobalVar;
+  Params, TheResult: lpString;
+begin
+  Result := '';
+  if (not v.HasType()) then
+    Exit;
+
+  AName := LapeCase(AName);
+  VariantType := Compiler.getBaseType(ltVariant);
+  VType := v.VarType;
+
+  if (VType <> nil) and (VType.Name <> '') then
+    if (VType.ManagedDeclarations.ItemCount > 0) then
+    begin
+      Decls := VType.ManagedDeclarations;
+      C := Decls.ItemCount - 1;
+
+      for i := 0 to C do
+       if (Decls.Items[i] is TLapeGlobalVar) then
+       begin
+         TempVar := TLapeGlobalVar(Decls.Items[i]);
+         if (VaildMethod(TempVar, Params, TheResult)) then
+           Result += Format('''%s.%s'': begin %s %s(%s).%s%s; end;',
+                            [AName, Lowercase(TempVar.Name), TheResult,
+                            VType.Name, AName, TempVar.Name, Params]) + LineEnding;
+       end;
+    end;
+end;
+
 function TraverseGlobals(Compiler: TLapeCompiler; Callback: TTraverseCallback; BaseName: lpString = ''; Decls: TLapeDeclarationList = nil): lpString;
 var
   i: Integer;
@@ -344,15 +429,37 @@ procedure ExposeGlobals(Compiler: TLapeCompiler; HeaderOnly, DoOverride: Boolean
       'end;';
   end;
 
+  function VariantInvokeEx: lpString;
+  begin
+    Result := 'function VariantInvokeEx(type_var, Method: String; Params: array of Variant = []): Variant;';
+    if DoOverride then
+      Result := Result + 'override;';
+    Result := Result + 'begin Result := Unassigned;';
+    if (not HeaderOnly) then
+    begin
+      {$IFDEF Lape_CaseSensitive}
+      Result := Result + 'case type_var + ''.'' + Method of ';
+      {$ELSE}
+      Result := Result + 'case LowerCase(type_var + ''.'' + Method) of ';
+      {$ENDIF}
+
+      Result := Result + LineEnding +
+        TraverseGlobals(Compiler, @ExposeGlobals__InvokeEx) +
+        'end;';
+    end;
+    Result := Result + 'end;';
+  end;
+
 begin
   if (Compiler = nil) then
     Exit;
 
   Compiler.addDelayedCode(
-    GetGlobalPtr()  + LineEnding +
-    GetGlobalName() + LineEnding +
-    GetGlobalVal()  + LineEnding +
-    VariantInvoke() + LineEnding +
+    GetGlobalPtr()    + LineEnding +
+    GetGlobalName()   + LineEnding +
+    GetGlobalVal()    + LineEnding +
+    VariantInvoke()   + LineEnding +
+    VariantInvokeEx() + LineEnding +
     ToString()
   );
 end;
