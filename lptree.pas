@@ -2047,7 +2047,7 @@ var
       for i := 0 to Params.Count - 1 do
       try
         if (ParamVars[i].VarPos.MemPos = NullResVar.VarPos.MemPos) then
-          if (Params[i].ParType in Lape_RefParams) then
+          if (Params[i].ParType in Lape_RefParams) or ((Params[i].VarType <> nil) and (Params[i].VarType.NeedFinalization)) then
             FParams[i].CompileToTempVar(Offset, ParamVars[i])
           else
             ParamVars[i] := getStackVar(FParams[i], Offset);
@@ -2057,6 +2057,10 @@ var
         then
           LapeException(lpeCannotInvoke, [FParams[i], Self]);
 
+        if (Params[i].VarType <> nil) and (ParamVars[i].VarType.BaseType = ltRecord) and
+           not(Params[i].VarType.Equals(ParamVars[i].VarType, False)) then
+          LapeExceptionFmt(lpeVariableOfTypeExpected, [Params[i].VarType.Name, ParamVars[i].VarType.Name], DocPos);
+          
         if (Params[i].ParType in Lape_RefParams) then
         begin
           if (not (Params[i].ParType in Lape_ValParams)) and (not ParamVars[i].Writeable) then
@@ -2113,8 +2117,11 @@ var
         else if (not (Params[i].ParType in Lape_ValParams)) and (not ParamVars[i].Writeable) then
           LapeException(lpeVariableExpected, [FParams[i], Self]);
 
-        if (Params[i].VarType <> nil) and (not Params[i].VarType.Equals(ParamVars[i].VarType)) then
-          AssignToTempVar(ParamVars[i], Params[i], mpVar, Self._DocPos);
+        if (Params[i].VarType <> nil) then
+          if (ParamVars[i].VarType.BaseType = ltRecord) and not(Params[i].VarType.Equals(ParamVars[i].VarType, False)) then
+            LapeExceptionFmt(lpeVariableOfTypeExpected, [Params[i].VarType.Name, ParamVars[i].VarType.Name], Self._DocPos)
+          else if not(Params[i].VarType.Equals(ParamVars[i].VarType)) then
+            AssignToTempVar(ParamVars[i], Params[i], mpVar, Self._DocPos);
 
         AssignToStack(ParamVars[i], Self._DocPos);
       end;

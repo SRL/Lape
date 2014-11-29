@@ -2637,6 +2637,46 @@ procedure lpeLBool_NEQ_BBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDE
 procedure lpeLBool_NEQ_WBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PLongBool(Left)^ = LongBool(False)) <> (PWordBool(Right)^ = LongBool(False)); end;
 procedure lpeLBool_NEQ_LBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PLongBool(Left)^ = LongBool(False)) <> (PLongBool(Right)^ = LongBool(False)); end;
 
+procedure lpeBBool_LT_BBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PByteBool(Left)^ = ByteBool(False)) > (PByteBool(Right)^ = ByteBool(False)); end;
+procedure lpeBBool_LT_WBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PByteBool(Left)^ = WordBool(False)) > (PWordBool(Right)^ = WordBool(False)); end;
+procedure lpeBBool_LT_LBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PByteBool(Left)^ = LongBool(False)) > (PLongBool(Right)^ = LongBool(False)); end;
+procedure lpeWBool_LT_BBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PWordBool(Left)^ = WordBool(False)) > (PByteBool(Right)^ = WordBool(False)); end;
+procedure lpeWBool_LT_WBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PWordBool(Left)^ = WordBool(False)) > (PWordBool(Right)^ = WordBool(False)); end;
+procedure lpeWBool_LT_LBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PWordBool(Left)^ = LongBool(False)) > (PLongBool(Right)^ = LongBool(False)); end;
+procedure lpeLBool_LT_BBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PLongBool(Left)^ = LongBool(False)) > (PByteBool(Right)^ = LongBool(False)); end;
+procedure lpeLBool_LT_WBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PLongBool(Left)^ = LongBool(False)) > (PWordBool(Right)^ = LongBool(False)); end;
+procedure lpeLBool_LT_LBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PLongBool(Left)^ = LongBool(False)) > (PLongBool(Right)^ = LongBool(False)); end;
+
+procedure lpeBBool_GT_BBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PByteBool(Left)^ = ByteBool(False)) < (PByteBool(Right)^ = ByteBool(False)); end;
+procedure lpeBBool_GT_WBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PByteBool(Left)^ = WordBool(False)) < (PWordBool(Right)^ = WordBool(False)); end;
+procedure lpeBBool_GT_LBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PByteBool(Left)^ = LongBool(False)) < (PLongBool(Right)^ = LongBool(False)); end;
+procedure lpeWBool_GT_BBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PWordBool(Left)^ = WordBool(False)) < (PByteBool(Right)^ = WordBool(False)); end;
+procedure lpeWBool_GT_WBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PWordBool(Left)^ = WordBool(False)) < (PWordBool(Right)^ = WordBool(False)); end;
+procedure lpeWBool_GT_LBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PWordBool(Left)^ = LongBool(False)) < (PLongBool(Right)^ = LongBool(False)); end;
+procedure lpeLBool_GT_BBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PLongBool(Left)^ = LongBool(False)) < (PByteBool(Right)^ = LongBool(False)); end;
+procedure lpeLBool_GT_WBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PLongBool(Left)^ = LongBool(False)) < (PWordBool(Right)^ = LongBool(False)); end;
+procedure lpeLBool_GT_LBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PLongBool(Left)^ = LongBool(False)) < (PLongBool(Right)^ = LongBool(False)); end;
+
+procedure lpeBBool_LTE_BBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PByteBool(Left)^ = ByteBool(False)) >= (PByteBool(Right)^ = ByteBool(False)); end;
+procedure lpeBBool_LTE_WBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PByteBool(Left)^ = WordBool(False)) >= (PWordBool(Right)^ = WordBool(False)); end;
+procedure lpeBBool_LTE_LBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PByteBool(Left)^ = LongBool(False)) >= (PLongBool(Right)^ = LongBool(False)); end;
+procedure lpeWBool_LTE_BBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PWordBool(Left)^ = WordBool(False)) >= (PByteBool(Right)^ = WordBool(False)); end;
+procedure lpeWBool_LTE_WBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PWordBool(Left)^ = WordBool(False)) >= (PWordBool(Right)^ = WordBool(False)); end;
+procedure lpeWBool_LTE_LBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PWordBool(Left)^ = LongBool(False)) >= (PLongBool(Right)^ = LongBool(False)); end;
+procedure lpeLBool_LTE_BBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PLongBool(Left)^ = LongBool(False)) >= (PByteBool(Right)^ = LongBool(False)); end;
+procedure lpeLBool_LTE_WBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PLongBool(Left)^ = LongBool(False)) >= (PWordBool(Right)^ = LongBool(False)); end;
+procedure lpeLBool_LTE_LBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PLongBool(Left)^ = LongBool(False)) >= (PLongBool(Right)^ = LongBool(False)); end;
+
+procedure lpeBBool_GTE_BBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PByteBool(Left)^ = ByteBool(False)) <= (PByteBool(Right)^ = ByteBool(False)); end;
+procedure lpeBBool_GTE_WBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PByteBool(Left)^ = WordBool(False)) <= (PWordBool(Right)^ = WordBool(False)); end;
+procedure lpeBBool_GTE_LBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PByteBool(Left)^ = LongBool(False)) <= (PLongBool(Right)^ = LongBool(False)); end;
+procedure lpeWBool_GTE_BBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PWordBool(Left)^ = WordBool(False)) <= (PByteBool(Right)^ = WordBool(False)); end;
+procedure lpeWBool_GTE_WBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PWordBool(Left)^ = WordBool(False)) <= (PWordBool(Right)^ = WordBool(False)); end;
+procedure lpeWBool_GTE_LBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PWordBool(Left)^ = LongBool(False)) <= (PLongBool(Right)^ = LongBool(False)); end;
+procedure lpeLBool_GTE_BBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PLongBool(Left)^ = LongBool(False)) <= (PByteBool(Right)^ = LongBool(False)); end;
+procedure lpeLBool_GTE_WBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PLongBool(Left)^ = LongBool(False)) <= (PWordBool(Right)^ = LongBool(False)); end;
+procedure lpeLBool_GTE_LBool(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := (PLongBool(Left)^ = LongBool(False)) <= (PLongBool(Right)^ = LongBool(False)); end;
+
 //string + char
 //ShortString
 procedure lpeSString_EQ_SString(const Dest, Left, Right: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF} begin PEvalBool(Dest)^ := PShortString(Left)^ = PShortString(Right)^; end;
