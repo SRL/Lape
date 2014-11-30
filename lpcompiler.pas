@@ -3631,7 +3631,7 @@ begin
   Result := addGlobalMethod(AParams, AParTypes, AParDefaults, nil, Value, AName);
 end;
 
-function TLapeCompiler.addDelayedCode(ACode: lpString; AfterCompilation: Boolean = True; IsGlobal: Boolean = True; AFileName:String='Lape'): TLapeTree_Base;
+function TLapeCompiler.addDelayedCode(ACode: lpString; AfterCompilation: Boolean = True; IsGlobal: Boolean = True; AFileName:String='addDelayedCode'): TLapeTree_Base;
 var
   Index: Integer;
   OldState: Pointer;
