@@ -231,8 +231,8 @@ type
     function addGlobalMethod(AParams: array of TLapeType; AParTypes: array of ELapeParameterType; AParDefaults: array of TLapeGlobalVar; ARes: TLapeType; Value: TMethod; AName: lpString): TLapeGlobalVar; overload; virtual;
     function addGlobalMethod(AParams: array of TLapeType; AParTypes: array of ELapeParameterType; AParDefaults: array of TLapeGlobalVar; Value: TMethod; AName: lpString): TLapeGlobalVar; overload; virtual;
 
-    function addDelayedCode(ACode: lpString; AfterCompilation: Boolean = True; IsGlobal: Boolean = True): TLapeTree_Base; virtual;
-
+    function addDelayedCode(ACode: lpString; AfterCompilation: Boolean = True; IsGlobal: Boolean = True; AFileName:String='addDelayedCode'): TLapeTree_Base; virtual;
+    
     property InternalMethodMap: TLapeInternalMethodMap read FInternalMethodMap;
     property Tree: TLapeTree_Base read FTree;
     property DelayedTree: TLapeTree_DelayedStatementList read FDelayedTree;
@@ -3631,7 +3631,7 @@ begin
   Result := addGlobalMethod(AParams, AParTypes, AParDefaults, nil, Value, AName);
 end;
 
-function TLapeCompiler.addDelayedCode(ACode: lpString; AfterCompilation: Boolean = True; IsGlobal: Boolean = True): TLapeTree_Base;
+function TLapeCompiler.addDelayedCode(ACode: lpString; AfterCompilation: Boolean = True; IsGlobal: Boolean = True; AFileName:String='addDelayedCode'): TLapeTree_Base;
 var
   Index: Integer;
   OldState: Pointer;
@@ -3640,7 +3640,7 @@ begin
   if hasTokenizer() and (not Importing) then
     OldState := getTempTokenizerState(ACode, Tokenizer.FileName)
   else
-    OldState := getTempTokenizerState(ACode, '!addDelayedCode');
+    OldState := getTempTokenizerState(ACode, '!'+AFileName);
 
   try
     Result := ParseFile();
