@@ -426,19 +426,41 @@ end;
 
 {$IFDEF Lape_NativeKeyword}
 procedure _LapeUNatify(const Params: PParamArray; const Result: Pointer); {$IFDEF Lape_CDECL}cdecl;{$ENDIF}
+
   function getByCodePos(Compiler: TLapeCompiler; CodePos: TCodePos): TLapeGlobalVar;
   var
-    DeclArr: TLapeDeclArray;
-    I, H: UInt32;
+    DeclArr, DeclArr2: TLapeDeclArray;
+    Decl: TLapeGlobalVar;
+    I, H, J: UInt32;
   begin
+    Result := nil;
     DeclArr := Compiler.GlobalDeclarations.getByClass(TLapeGlobalVar, bTrue);
 
     H := High(DeclArr);
     for I := 0 to H do
-      if ((DeclArr[I] <> nil) and ((DeclArr[I]as TLapeGlobalVar).Ptr <> nil)) then
-        if (TCodePos((DeclArr[I] as TLapeGlobalVar).Ptr^) = CodePos) then
-          Exit(DeclArr[I] as TLapeGlobalVar);
+    begin
+      Decl := TLapeGlobalVar(DeclArr[I]);
+
+      if (Decl <> nil) and (Decl.Ptr <> nil) then
+        if (TCodePos(Decl.Ptr^) = CodePos) then
+          Exit(Decl);
+
+      if (Decl.VarType <> nil) and (Decl.VarType.DeclarationList <> nil) and
+         (Decl.VarType.ManagedDeclarations.ItemCount > 0) then
+      begin
+        DeclArr2 := Decl.VarType.ManagedDeclarations.getByClass(TLapeGlobalVar, bTrue);
+        for J := 0 to High(DeclArr2) do
+        begin
+          Decl := TLapeGlobalVar(DeclArr2[J]);
+
+          if (Decl <> nil) and (Decl.Ptr <> nil) then
+            if (TCodePos(Decl.Ptr^) = CodePos) then
+              Exit(Decl);
+        end;
+      end;
+    end;
   end;
+             
 type
   PLapeCompiler = ^TLapeCompiler;
 var
