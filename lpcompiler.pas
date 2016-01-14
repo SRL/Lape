@@ -1645,7 +1645,6 @@ begin
       end;
       {$ENDIF}
 
-      Result.Method.isConstant := True;
       if isExternal then
         Exit;
 
