@@ -1641,7 +1641,7 @@ begin
 
         Result.Method.Name := '_' + Result.Method.Name;
         addGlobalVar(nil, FuncName);
-        addDelayedCode(Format('begin %s := Natify({$IFDEF AUTOINVOKE}@{$ENDIF}%s); end;', [FuncName, Result.Method.Name]), False);
+        addDelayedCode(Format('begin %s := Natify({$IFDEF AUTOINVOKE}@{$ENDIF}%s); end;', [FuncName, Result.Method.Name]), '!addNatifyCode', False);
       end;
       {$ENDIF}
 
