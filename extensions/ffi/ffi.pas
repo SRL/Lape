@@ -119,7 +119,7 @@ type
     {$IFDEF LINUX}
       FFI_SYSV,
       {$IFDEF CPUARM}
-	    FFI_VFP
+        FFI_VFP
       {$ELSE}
         FFI_UNIX64,
         FFI_THISCALL,
