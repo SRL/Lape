@@ -138,7 +138,7 @@ begin
   inherited Create(Msg);
   with FDocPos do
   begin
-    Line := -1;
+    Line := 0;
     Col := 0;
     Filename := '';
   end;
