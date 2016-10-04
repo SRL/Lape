@@ -230,7 +230,7 @@ type
   PLapeSmallSet = ^TLapeSmallSet;
   PLapeLargeSet = ^TLapeLargeSet;
 
-  {$IF DEFINED(FPC) AND (NOT DEFINED(WINDOWS)) AND (FPC_FULLVERSION >= 20501)}
+  {$IF DEFINED(FPC) AND (NOT DEFINED(MSWINDOWS)) AND (FPC_FULLVERSION >= 20501)}
     {$DEFINE Interface_CDecl}
   {$IFEND}
 
@@ -475,6 +475,8 @@ type
     property Sorted: Boolean read getSorted write setSorted;
   end;
 
+  EDeclarationUsed = (duFalse, duTrue, duIgnore);
+
   TLapeDeclaration = class(TLapeBaseDeclClass)
   protected
     FList: TLapeDeclarationList;
@@ -485,7 +487,7 @@ type
     procedure setName(AName: lpString); virtual;
   public
     _DocPos: TDocPos;
-    Used: Boolean;
+    Used: EDeclarationUsed;
     constructor Create(AName: lpString = ''; ADocPos: PDocPos = nil; AList: TLapeDeclarationList = nil); reintroduce; virtual;
     destructor Destroy; override;
 
@@ -677,7 +679,7 @@ implementation
 uses
   typinfo, variants,
   {$IFDEF Lape_NeedAnsiStringsUnit}AnsiStrings,{$ENDIF}
-  lpexceptions;
+  lpmessages;
 
 function LapeCase(const Str: lpString): lpString;
 begin
@@ -2177,7 +2179,7 @@ constructor TLapeDeclaration.Create(AName: lpString = ''; ADocPos: PDocPos = nil
 begin
   inherited Create();
   Name := AName;
-  Used := False;
+  Used := duIgnore;
   if (ADocPos <> nil) then
     _DocPos := ADocPos^
   else

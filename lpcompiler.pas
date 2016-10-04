@@ -31,6 +31,7 @@ type
   TLapeHandleDirective = function(Sender: TLapeCompiler; Directive, Argument: lpString; InPeek, InIgnore: Boolean): Boolean of object;
   TLapeHandleExternal = function(Sender: TLapeCompiler; Header: TLapeGlobalVar): Boolean of object;
   TLapeFindFile = function(Sender: TLapeCompiler; var FileName: lpString): TLapeTokenizerBase of object;
+  TLapeHint = procedure(Sender: TLapeCompiler; Msg: lpString) of object;
   TLapeCompilerNotification = {$IFDEF FPC}specialize{$ENDIF} TLapeNotifier<TLapeCompiler>;
   TLapeTokenizerArray = array of TLapeTokenizerBase;
 
@@ -270,7 +271,7 @@ uses
   Variants,
   {$IFDEF Lape_NeedAnsiStringsUnit}AnsiStrings,{$ENDIF}
   lpvartypes_ord, lpvartypes_record, lpvartypes_array,
-  lpexceptions, lpeval, lpinterpreter;
+  lpmessages, lpeval, lpinterpreter;
 
 function TLapeCompiler.getPDocPos: PDocPos;
 begin
@@ -510,7 +511,7 @@ begin
 
     Method := TLapeTree_Method.Create(Result, FStackInfo, Self);
     Method.Statements := TLapeTree_StatementList.Create(Self);
-    Method.Statements.addStatement(TLapeTree_FinalizeVar.Create(FStackInfo.addVar(lptVar, AParams[0], 'AVar'), Self));
+    Method.Statements.addStatement(TLapeTree_FinalizeVar.Create(FStackInfo.addVar(lptVar, AParams[0], '!AVar'), Self));
     addDelayedExpression(Method);
   finally
     DecStackInfo(True, False, Method = nil);
@@ -539,8 +540,8 @@ begin
     Sender.addMethod(Result);
 
     Assignment := TLapeTree_Operator.Create(op_Assign, Self);
-    Assignment.Right := TLapeTree_ResVar.Create(_ResVar.New(FStackInfo.addVar(lptConstRef, AParams[0], 'Src')), Self);
-    Assignment.Left  := TLapeTree_ResVar.Create(_ResVar.New(FStackInfo.addVar(lptOut, AParams[1], 'Dst')), Self);
+    Assignment.Right := TLapeTree_ResVar.Create(_ResVar.New(FStackInfo.addVar(lptConstRef, AParams[0], '!Src')), Self);
+    Assignment.Left  := TLapeTree_ResVar.Create(_ResVar.New(FStackInfo.addVar(lptOut, AParams[1], '!Dst')), Self);
 
     Method := TLapeTree_Method.Create(Result, FStackInfo, Self);
     Method.Statements := TLapeTree_StatementList.Create(Self);
@@ -658,6 +659,8 @@ procedure TLapeCompiler.InitBaseDefinitions;
     addGlobalVar(OLMethod.NewGlobalVar('ToString'));
   end;
 begin
+  StartImporting();
+
   addBaseDefine('Lape');
   addBaseDefine('Sesquipedalian');
 
@@ -761,6 +764,8 @@ begin
     _LapeInsert,
     '!addDelayedCore'
   );
+
+  EndImporting();
 end;
 
 function TLapeCompiler.EnsureExpression(Node: TLapeTree_ExprBase): TLapeTree_ExprBase;
@@ -912,6 +917,8 @@ var
         Result := (lcoContinueCase in FOptions)
       else if (Def = 'coperators') then
         Result := (lcoCOperators in FOptions)
+      else if (Def = 'hints') then
+        Result := (lcoHints in FOptions)
       else
         Result := False;
     end;
@@ -1006,7 +1013,7 @@ begin
   else if (Directive = 'define') then
     AddDefine(FDefines, string(Trim(Argument)))
   else if (Directive = 'undef') then
-   RemoveDefine(FDefines, string(Trim(Argument)))
+    RemoveDefine(FDefines, string(Trim(Argument)))
   else if (Directive = 'macro') then
   begin
     IncludeFile := FDefines.Values[string(Trim(Argument))];
@@ -1081,6 +1088,8 @@ begin
     setOption(lcoScopedEnums)
   else if (Directive = 'j') or (Directive = 'constaddress') then
     setOption(lcoConstAddress)
+  else if (Directive = 'h') or (Directive = 'hints') then
+    setOption(lcoHints)
   else if (Directive = 'continuecase') then
     setOption(lcoContinueCase)
   else if (Directive = 'coperators') then
@@ -1273,6 +1282,8 @@ end;
 function TLapeCompiler.ParseMethodHeader(out Name: lpString; addToScope: Boolean = True): TLapeType_Method;
 
   procedure addVar(ParType: ELapeParameterType; VarType: TLapeType; AVar: lpString);
+  var
+    StackVar: TLapeStackVar;
   begin
     if addToScope then
       if (FStackInfo = nil) then
@@ -1280,7 +1291,11 @@ function TLapeCompiler.ParseMethodHeader(out Name: lpString; addToScope: Boolean
       else if (LapeCase(Name) = LapeCase(AVar)) or hasDeclaration(AVar, True) then
         LapeExceptionFmt(lpeDuplicateDeclaration, [AVar], Tokenizer.DocPos)
       else
-        FStackInfo.addVar(ParType, VarType, AVar);
+      begin
+        StackVar := FStackInfo.addVar(ParType, VarType, AVar);
+        if (lcoHints in FOptions) then
+          StackVar.Used := duFalse;
+      end;
   end;
 
 var
@@ -1326,7 +1341,8 @@ begin
 
         if (Typ is TLapeType) and (TLapeType(Typ).Size > 0) then
         begin
-          addVar(Lape_SelfParam, TLapeType(Typ), 'Self');
+          if addToScope then
+            FStackInfo.addSelfVar(Lape_SelfParam, TLapeType(Typ));
           Result.Free();
           Result := TLapeType_MethodOfType.Create(Self, TLapeType(Typ), nil, nil, '', @Pos);
         end
@@ -1358,6 +1374,7 @@ begin
         if (Tokenizer.Tok = tk_sym_Colon) then
         begin
           Param.VarType := ParseType(nil, True);
+          Param.VarType._DocPos := Tokenizer.DocPos;
           if (Param.VarType = nil) then
             LapeException(lpeTypeExpected, Tokenizer.DocPos);
           Expect([tk_sym_Equals, tk_sym_SemiColon, tk_sym_ParenthesisClose], True, False);
@@ -1399,6 +1416,7 @@ begin
     begin
       Expect(tk_sym_Colon, True, False);
       Result.Res := ParseType(nil);
+      Result.Res._DocPos := Tokenizer.DocPos;
       if (Result.Res = nil) then
         LapeException(lpeTypeExpected, Tokenizer.DocPos);
 
@@ -1433,7 +1451,7 @@ var
   begin
     if (not isExternal) then
     begin
-      FStackInfo.addVar(Param, VarType, 'Self');
+      FStackInfo.addSelfVar(Param, VarType);
       FStackInfo.VarStack.MoveItem(FStackInfo.VarStack.Count - 1, 0);
     end;
   end;
@@ -1762,7 +1780,6 @@ begin
 
       if (Result.Statements = nil) or (not (Result.Statements.Statements[Result.Statements.Statements.Count - 1] is TLapeTree_StatementList)) then
         Expect(tk_kw_Begin, False, False);
-
     except
       Result.FreeStackInfo := False;
       FreeAndNil(Result);
@@ -1786,9 +1803,9 @@ begin
     if (FuncHeader <> nil) then
     begin
       if (FuncHeader is TLapeType_MethodOfType) then
-        FStackInfo.addVar(TLapeType_MethodOfType(FuncHeader).SelfParam, TLapeType_MethodOfType(FuncHeader).ObjectType, 'Self')
+        FStackInfo.addSelfVar(TLapeType_MethodOfType(FuncHeader).SelfParam, TLapeType_MethodOfType(FuncHeader).ObjectType)
       else if (FuncHeader is TLapeType_MethodOfObject) then
-        FStackInfo.addVar(lptConstRef, getGlobalType('ConstPointer'), 'Self');
+        FStackInfo.addSelfVar(lptConstRef, getGlobalType('ConstPointer'));
       for i := 0 to FuncHeader.Params.Count - 1 do
         FStackInfo.addVar(FuncHeader.Params[i].ParType, FuncHeader.Params[i].VarType, lpString('Param'+IntToStr(i)));
       if (FuncHeader.Res <> nil) then
@@ -2197,7 +2214,6 @@ var
 begin
   Result := TLapeTree_VarList.Create(Self, getPDocPos());
   try
-
     isConst := (Tokenizer.Tok = tk_kw_Const);
     wasShortCircuit := isConst and (lcoShortCircuit in FOptions);
     if wasShortCircuit then
@@ -2265,6 +2281,9 @@ begin
           VarDecl.VarDecl := addLocalVar(VarType, Identifiers[i]);
 
         VarDecl.Default := nil;
+        VarDecl.VarDecl._DocPos := Tokenizer.DocPos;
+        if (lcoHints in FOptions) then
+          VarDecl.VarDecl.Used := duFalse;
         if (DefConst <> nil) then
           if (not (VarDecl.VarDecl is TLapeGlobalVar)) or (VarType is TLapeType_Method) then
             VarDecl.Default := TLapeTree_GlobalVar.Create(DefConst, Self, GetPDocPos())
@@ -2624,8 +2643,15 @@ begin
           begin
             Expr := getExpression(Tokenizer.TokString, getPDocPos());
             if (Expr = nil) then
-              LapeExceptionFmt(lpeUnknownDeclaration, [Tokenizer.TokString], Tokenizer.DocPos)
-            else if (Expr is TLapeTree_Invoke) then
+              LapeExceptionFmt(lpeUnknownDeclaration, [Tokenizer.TokString], Tokenizer.DocPos);
+
+            if (Expr is TLapeTree_ResVar) then
+              TLapeTree_ResVar(Expr).ResVar.VarPos.StackVar.Used := duTrue
+            else
+            if (Expr is TLapeTree_GlobalVar) then
+              TLapeTree_GlobalVar(Expr).GlobalVar.Used := duTrue;
+
+            if (Expr is TLapeTree_Invoke) then
             begin
               Method := Expr as TLapeTree_Invoke;
               DoNext := False;
@@ -3185,7 +3211,6 @@ begin
   setTokenizer(ATokenizer);
   Reset();
 
-  StartImporting();
   InitBaseDefinitions();
 end;
 
@@ -3437,6 +3462,25 @@ begin
 end;
 
 function TLapeCompiler.Compile: Boolean;
+
+  procedure GlobalHints;
+  var
+    Decls: TLapeDeclArray;
+    Decl: TLapeGlobalVar;
+    i: Integer;
+  begin
+    Decls := GlobalDeclarations.getByClass(TLapeGlobalVar, bFalse);
+    for i := 0 to High(Decls) do
+    begin
+      Decl := Decls[i] as TLapeGlobalVar;
+      if (Decl.Used <> duFalse) or (Decl.Name = '') or (Decl.Name[1] = '!') or
+         (not Decl.Writeable) or ((Decl._DocPos.Line = NullDocPos.Line) and (Decl._DocPos.Col = NullDocPos.Line)) then
+        Continue;
+
+      Hint(lphVariableNotUsed, [Decl.Name], Decl._DocPos);
+    end;
+  end;
+
 begin
   Result := False;
   try
@@ -3446,6 +3490,7 @@ begin
     FTree := ParseFile();
     if (FTree = nil) and (FDelayedTree.GlobalCount(False) <= 0) then
       LapeException(lpeExpressionExpected);
+    GlobalHints();
 
     FAfterParsing.Notify(Self);
 
